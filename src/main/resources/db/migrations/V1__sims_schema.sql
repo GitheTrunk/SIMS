@@ -2,7 +2,7 @@ CREATE TABLE users (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role ENUM('STUDENT',, 'ADMIN') NOT NULL,
+    role ENUM('STUDENT', 'ADMIN') NOT NULL,
     enabled BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -58,7 +58,7 @@ CREATE TABLE placements (
     application_id BIGINT UNIQUE NOT NULL,
     admin_id BIGINT NOT NULL,
 
-    placement_date DATE DEFAULT CURRENT_DATE,
+    placement_date DATE,
     status ENUM('PLACED', 'CANCELLED') DEFAULT 'PLACED',
 
     FOREIGN KEY (application_id)
