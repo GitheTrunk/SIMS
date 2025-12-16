@@ -1,7 +1,0 @@
-CREATE TABLE companies (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(150) NOT NULL,
-    contact_info VARCHAR(255),
-    website VARCHAR(150),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
