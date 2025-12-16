@@ -1,0 +1,32 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — SIMS</title>
+    <style>
+        body { font-family: Arial, sans-serif; background:#f5f7fb; }
+        .container { max-width:400px; margin:80px auto; background:white; padding:24px; box-shadow:0 2px 8px rgba(0,0,0,.08); border-radius:6px }
+        label { display:block; margin-top:12px }
+        input[type="email"], input[type="password"] { width:100%; padding:8px; margin-top:6px; box-sizing:border-box }
+        button { margin-top:16px; padding:10px 14px }
+        .error { color:#b00020; margin-bottom:8px }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Sign in</h2>
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+    <form th:action="@{/login}" method="post">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required />
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required />
+
+        <button type="submit">Sign in</button>
+    </form>
+    <p style="margin-top:12px"><a th:href="@{/}">Back to home</a></p>
+</div>
+</body>
+</html>
