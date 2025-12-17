@@ -1,0 +1,18 @@
+@startuml
+
+start
+
+:Student opens "Internships Page";
+:System requests all available internships;
+
+if (Any internships available?) then (No)
+  :Show message "No internships available";
+else (Yes)
+  :Display list of internships;
+  :Show Title, Company, Location, Seats, Start & End Date;
+  :Student can select an internship to apply;
+endif
+
+stop
+
+@enduml

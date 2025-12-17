@@ -1,0 +1,18 @@
+@startuml
+
+start
+
+:Admin opens "Admin Dashboard";
+:Click "Create Internship";
+:Enter Internship Details (Title, Description, Location, Seats, Start/End Dates, Company);
+
+if (Company exists?) then (No)
+  :Show Error "Company not found";
+else (Yes)
+  :Insert Internship into "internships" table;
+  :Show Success Message;
+endif
+
+stop
+
+@enduml

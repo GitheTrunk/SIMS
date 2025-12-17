@@ -1,0 +1,23 @@
+@startuml
+
+start
+
+:Admin opens "Admin Dashboard";
+:Select pending application;
+
+if (Application already processed?) then (Yes)
+  :Show message "Action not allowed";
+else (No)
+  if (Seats available?) then (No)
+    :Show message "No seats available";
+  else (Yes)
+    :Update application status to APPROVED;
+    :Decrease internship seats by 1;
+    :Optionally, create placement record;
+    :Show Success Message;
+  endif
+endif
+
+stop
+
+@enduml

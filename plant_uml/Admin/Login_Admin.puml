@@ -1,0 +1,17 @@
+@startuml
+
+start
+
+:Open Login Page;
+:Enter Email & Password;
+:Click Login;
+
+if (Valid Credentials?) then (Yes)
+  :Go to Dashboard for admin;
+else (No)
+  :Show Error Message(Try again!!);
+endif
+
+stop
+
+@enduml

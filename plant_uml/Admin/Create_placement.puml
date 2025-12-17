@@ -1,0 +1,18 @@
+@startuml
+
+start
+
+:Admin opens "Admin Dashboard";
+:Select approved application;
+
+if (Placement already exists?) then (Yes)
+  :Show message "Placement already created";
+else (No)
+  :Enter Placement Details (Placement Date, Assign Admin);
+  :Insert record into "placements" table;
+  :Show Success Message;
+endif
+
+stop
+
+@enduml

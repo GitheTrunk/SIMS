@@ -1,0 +1,64 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+class User {
+  id : BIGINT
+  email : String
+  password : String
+  role : Role
+  enabled : Boolean
+  createdAt : Timestamp
+}
+
+class StudentProfile {
+  id : BIGINT
+  fullName : String
+  department : String
+  year : INT
+}
+
+class Company {
+  id : BIGINT
+  name : String
+  address : String
+}
+
+class Internship {
+  id : BIGINT
+  title : String
+  description : String
+  seats : INT
+}
+
+class Application {
+  id : BIGINT
+  status : String
+  appliedAt : Timestamp
+}
+
+class Placement {
+  id : BIGINT
+  placementDate : Date
+  status : String
+}
+
+class Evaluation {
+  id : BIGINT
+  score : INT
+  remarks : String
+}
+
+User "1" -- "1" StudentProfile
+User "1" -- "0..*" Internship
+Company "1" -- "0..*" Internship
+StudentProfile "1" -- "0..*" Application
+Internship "1" -- "0..*" Application
+Application "1" -- "0..1" Placement
+Placement "1" -- "0..1" Evaluation
+
+@enduml

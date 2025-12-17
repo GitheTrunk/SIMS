@@ -1,0 +1,35 @@
+@startuml
+actor Admin
+participant "Applications\n(applications)" as A
+participant "Internships\n(internships)" as I
+participant "Placements\n(placements)" as P
+participant "Evaluations\n(evaluations)" as E
+participant System
+
+Admin -> System: Login
+System -> Admin: Display Admin Dashboard
+
+Admin -> System: View pending applications
+System -> A: Fetch applications where status = PENDING
+A --> System: Return list of pending applications
+System -> Admin: Display pending applications
+
+Admin -> System: Select application to process
+System -> I: Check internship seats for selected application
+
+alt Seats available
+    System -> A: Update status to APPROVED
+    A --> System: Application approved
+
+    System -> P: Create placement record (application_id, admin_id, placement_date)
+    P --> System: Placement created
+
+    System -> E: Optionally enter evaluation (placement_id, evaluator_id, score, remarks)
+    E --> System: Evaluation saved
+
+    System -> Admin: Show success message
+else Seats full
+    System -> Admin: Show message "No seats available"
+end
+
+@enduml
