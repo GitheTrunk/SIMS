@@ -1,0 +1,36 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor Student
+actor Admin
+
+rectangle "Student Internship Management System (SIMS)" {
+
+  (Register)
+  (Login)
+  (View Internships)
+  (Apply for Internship)
+  (View Application Status)
+
+  (Manage Companies)
+  (Create Internship)
+  (Approve Application)
+  (Create Placement)
+  (Evaluate Student)
+}
+
+Student --> (Register)
+Student --> (Login)
+Student --> (View Internships)
+Student --> (Apply for Internship)
+Student --> (View Application Status)
+
+Admin --> (Login)
+Admin --> (Manage Companies)
+Admin --> (Create Internship)
+Admin --> (Approve Application)
+Admin --> (Create Placement)
+Admin --> (Evaluate Student)
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+
+start
+
+:Admin opens "Admin Dashboard";
+:Select Manage Internships;
+
+if (Action Type?) then (Create)
+  :Enter Internship Details (Title, Description, Location, Seats, Dates);
+  :Check if Company exists;
+  :Insert internship into "internships" table;
+  :Show Success Message;
+elseif (Action Type?) then (Update)
+  :Select Internship;
+  :Edit Internship Details;
+  :Update internship in "internships" table;
+  :Show Success Message;
+else (Delete)
+  :Select Internship;
+  :Delete internship from "internships" table;
+  :Show Success Message;
+endif
+
+stop
+
+@enduml

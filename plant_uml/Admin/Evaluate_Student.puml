@@ -1,0 +1,21 @@
+@startuml
+
+start
+
+:Admin opens "Admin Dashboard";
+:Select Placement from placements table;
+
+if (Evaluation exists for this placement?) then (Yes)
+  :Show message "Already evaluated";
+else (No)
+  :Enter Evaluation Details;
+  - Score (1-100)
+  - Remarks
+  - Evaluator ID (Admin)
+  :Insert record into evaluations table (placement_id, evaluator_id, score, remarks);
+  :Show Success Message;
+endif
+
+stop
+
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+
+start
+
+:Open Register Page;
+:Enter Email, Password, Full Name, Major, Year;
+
+if (Email exists?) then (Yes)
+  :Show Error Message;
+else (No)
+  :Create User Account;
+  :Create Student Profile;
+  :Show Success Message;
+endif
+
+stop
+
+@enduml
