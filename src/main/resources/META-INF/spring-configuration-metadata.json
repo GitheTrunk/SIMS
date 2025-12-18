@@ -1,0 +1,16 @@
+{
+  "properties": [
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "description": "JWT secret key for signing tokens",
+      "defaultValue": "defaultSecretKeyForDevelopmentPurposesOnly12345678901234567890"
+    },
+    {
+      "name": "jwt.expiration",
+      "type": "java.lang.Long",
+      "description": "JWT token expiration time in milliseconds",
+      "defaultValue": "86400000"
+    }
+  ]
+}

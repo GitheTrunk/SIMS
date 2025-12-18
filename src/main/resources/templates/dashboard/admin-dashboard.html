@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SIMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#667eea',
+                        secondary: '#764ba2'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-8 py-4">
+            <div class="flex justify-between items-center">
+                <a href="/" class="flex items-center gap-2 text-white text-2xl font-bold">
+                    <span class="text-3xl">📚</span>
+                    <span>SIMS</span>
+                </a>
+
+                <div class="hidden md:flex gap-8 flex-1 justify-center">
+                    <a href="/dashboard" class="text-white px-4 py-2 rounded hover:bg-white/20 transition">Dashboard</a>
+                    <a href="#" class="text-white px-4 py-2 rounded hover:bg-white/20 transition">Manage Internships</a>
+                    <a href="#" class="text-white px-4 py-2 rounded hover:bg-white/20 transition">Applications</a>
+                    <a href="#" class="text-white px-4 py-2 rounded hover:bg-white/20 transition">Users</a>
+                </div>
+
+                <div class="flex items-center gap-8">
+                    <div class="text-right text-white hidden md:block">
+                        <div class="font-semibold" th:text="${username}"></div>
+                        <div class="text-sm opacity-90">ADMIN</div>
+                    </div>
+                    <a href="/auth/logout" 
+                       class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded font-medium transition hover:-translate-y-0.5 hover:shadow-lg">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-8 py-8">
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Admin Dashboard 🛠️</h1>
+            <p class="text-xl text-gray-600">System Overview and Management</p>
+        </div>
+
+        <!-- Key Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-primary">
+                <h3 class="text-gray-600 text-sm font-semibold uppercase mb-2">Total Students</h3>
+                <div class="text-4xl font-bold text-primary">98</div>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-primary">
+                <h3 class="text-gray-600 text-sm font-semibold uppercase mb-2">Active Internships</h3>
+                <div class="text-4xl font-bold text-primary">24</div>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-primary">
+                <h3 class="text-gray-600 text-sm font-semibold uppercase mb-2">Total Applications</h3>
+                <div class="text-4xl font-bold text-primary">156</div>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-md border-l-4 border-primary">
+                <h3 class="text-gray-600 text-sm font-semibold uppercase mb-2">Pending Review</h3>
+                <div class="text-4xl font-bold text-primary">32</div>
+            </div>
+        </div>
+
+        <!-- Internship Management -->
+        <div class="flex justify-between items-center mb-6 mt-12">
+            <h2 class="text-3xl font-bold text-gray-800 border-b-4 border-primary pb-2">Internship Management</h2>
+            <a href="#" class="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg font-medium hover:-translate-y-0.5 hover:shadow-lg transition">
+                + Create Internship
+            </a>
+        </div>
+
+        <div class="bg-white rounded-xl overflow-hidden shadow-md mb-8">
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-gradient-to-r from-primary to-secondary text-white">
+                        <th class="px-6 py-4 text-left font-semibold">ID</th>
+                        <th class="px-6 py-4 text-left font-semibold">Title</th>
+                        <th class="px-6 py-4 text-left font-semibold">Department</th>
+                        <th class="px-6 py-4 text-left font-semibold">Applications</th>
+                        <th class="px-6 py-4 text-left font-semibold">Seats</th>
+                        <th class="px-6 py-4 text-left font-semibold">Status</th>
+                        <th class="px-6 py-4 text-left font-semibold">Posted Date</th>
+                        <th class="px-6 py-4 text-left font-semibold">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">#INT-001</td>
+                        <td class="px-6 py-4">Software Developer Intern</td>
+                        <td class="px-6 py-4">Engineering</td>
+                        <td class="px-6 py-4">15</td>
+                        <td class="px-6 py-4">5</td>
+                        <td class="px-6 py-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Active</span></td>
+                        <td class="px-6 py-4">Dec 10, 2025</td>
+                        <td class="px-6 py-4">
+                            <div class="flex gap-2">
+                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition">Edit</button>
+                                <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">#INT-002</td>
+                        <td class="px-6 py-4">Data Analyst Intern</td>
+                        <td class="px-6 py-4">Analytics</td>
+                        <td class="px-6 py-4">8</td>
+                        <td class="px-6 py-4">3</td>
+                        <td class="px-6 py-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Active</span></td>
+                        <td class="px-6 py-4">Dec 12, 2025</td>
+                        <td class="px-6 py-4">
+                            <div class="flex gap-2">
+                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition">Edit</button>
+                                <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4">#INT-003</td>
+                        <td class="px-6 py-4">Marketing Intern</td>
+                        <td class="px-6 py-4">Marketing</td>
+                        <td class="px-6 py-4">12</td>
+                        <td class="px-6 py-4">4</td>
+                        <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">Closed</span></td>
+                        <td class="px-6 py-4">Dec 01, 2025</td>
+                        <td class="px-6 py-4">
+                            <div class="flex gap-2">
+                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition">Edit</button>
+                                <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recent Applications -->
+        <div class="flex justify-between items-center mb-6 mt-12">
+            <h2 class="text-3xl font-bold text-gray-800 border-b-4 border-primary pb-2">Recent Applications</h2>
+        </div>
+
+        <div class="bg-white rounded-xl overflow-hidden shadow-md mb-8">
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-gradient-to-r from-primary to-secondary text-white">
+                        <th class="px-6 py-4 text-left font-semibold">Student</th>
+                        <th class="px-6 py-4 text-left font-semibold">Internship</th>
+                        <th class="px-6 py-4 text-left font-semibold">Applied Date</th>
+                        <th class="px-6 py-4 text-left font-semibold">Status</th>
+                        <th class="px-6 py-4 text-left font-semibold">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4">John Doe</td>
+                        <td class="px-6 py-4">Software Developer Intern</td>
+                        <td class="px-6 py-4">Dec 15, 2025</td>
+                        <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">Pending</span></td>
+                        <td class="px-6 py-4">
+                            <div class="flex gap-2">
+                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition">Approve</button>
+                                <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition">Reject</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- System Status -->
+        <div class="flex justify-between items-center mb-6 mt-12">
+            <h2 class="text-3xl font-bold text-gray-800 border-b-4 border-primary pb-2">System Status</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-xl p-6 shadow-md">
+                <h4 class="text-primary font-semibold mb-2">Database Status</h4>
+                <p class="text-gray-800">✅ Connected</p>
+                <p class="text-gray-400 text-sm mt-1">Last checked: 2 min ago</p>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-md">
+                <h4 class="text-primary font-semibold mb-2">API Status</h4>
+                <p class="text-gray-800">✅ Operational</p>
+                <p class="text-gray-400 text-sm mt-1">Response time: 45ms</p>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-md">
+                <h4 class="text-primary font-semibold mb-2">Server Load</h4>
+                <p class="text-gray-800">📊 Normal (32%)</p>
+                <p class="text-gray-400 text-sm mt-1">CPU: 28%, Memory: 45%</p>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-md">
+                <h4 class="text-primary font-semibold mb-2">Recent Activity</h4>
+                <p class="text-gray-800">👥 12 logins today</p>
+                <p class="text-gray-400 text-sm mt-1">Last: 5 minutes ago</p>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="flex justify-between items-center mb-6 mt-12">
+            <h2 class="text-3xl font-bold text-gray-800 border-b-4 border-primary pb-2">Quick Actions</h2>
+        </div>
+
+        <div class="bg-white rounded-xl p-8 shadow-md flex flex-wrap gap-4">
+            <a href="#" class="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg font-medium hover:-translate-y-0.5 hover:shadow-lg transition">
+                + Create Internship
+            </a>
+            <a href="#" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-medium transition">
+                📊 Generate Report
+            </a>
+            <a href="#" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-medium transition">
+                👥 Manage Users
+            </a>
+            <a href="#" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-medium transition">
+                📧 Send Notification
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
