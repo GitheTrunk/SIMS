@@ -1,0 +1,14 @@
+@startuml
+start
+
+:Open Register Page;
+:Enter Email & Password;
+:Create user account;
+
+:Enter Company Details;
+:Save company profile;
+
+:Show registration success;
+
+stop
+@enduml
