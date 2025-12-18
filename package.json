@@ -1,0 +1,27 @@
+{
+  "name": "sims",
+  "version": "1.0.0",
+  "description": "**A Spring Boot 3 (Java 21) web application** for managing student internships, company placements, and internship applications. Built with Thymeleaf for server-rendered views, Spring Data JPA for persistence, Flyway for schema versioning, and MySQL as the database.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GitheTrunk/SIMS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/GitheTrunk/SIMS/issues"
+  },
+  "homepage": "https://github.com/GitheTrunk/SIMS#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19"
+  }
+}

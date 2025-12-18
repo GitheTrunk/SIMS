@@ -5,23 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIMS - Student Information Management System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#667eea',
-                        secondary: '#764ba2'
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" th:href="@{/css/output.css}">
 </head>
 
 <body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary">
-    <div class="bg-white p-12 rounded-3xl shadow-2xl text-center max-w-2xl w-[90%]">
+    <div class="bg-white p-12 rounded-3xl shadow-2xl text-center max-w-2xl w-[100%]">
         <h1 class="text-5xl font-bold text-primary mb-4 flex items-center justify-center gap-4">
             <span>📚</span>
             <span>SIMS</span>
@@ -72,43 +60,3 @@
         </div>
     </div>
 </body>
-
-</html>
-        .status {
-            display: inline-block;
-            background: #10b981;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-weight: 600;
-            margin: 1rem 0;
-        }
-        p {
-            color: #666;
-            line-height: 1.6;
-            margin-top: 1rem;
-        }
-        .info {
-            margin-top: 2rem;
-            padding: 1rem;
-            background: #f3f4f6;
-            border-radius: 10px;
-        }
-        .info strong {
-            color: #667eea;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🎓 SIMS</h1>
-        <div class="status">✓ System Running</div>
-        <p>Student Information Management System is successfully initialized and ready to use.</p>
-        <div class="info">
-            <p><strong>Spring Boot:</strong> 3.4.0</p>
-            <p><strong>Java:</strong> 21</p>
-            <p><strong>Database:</strong> MySQL Connected</p>
-        </div>
-    </div>
-</body>
-</html>
