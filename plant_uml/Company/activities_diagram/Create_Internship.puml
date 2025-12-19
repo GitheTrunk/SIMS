@@ -1,0 +1,16 @@
+@startuml
+start
+
+:Open Company Dashboard;
+:Click Create Internship;
+:Enter internship details;
+
+if (Company exists?) then (Yes)
+  :Save internship to database;
+  :Show success message;
+else (No)
+  :Show error message;
+endif
+
+stop
+@enduml
