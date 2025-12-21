@@ -10,4 +10,24 @@ public class HomeController {
     public String home() {
         return "index";
     }
+
+    @GetMapping("/user-dashboard")
+    public String dashboard() {
+        return "user-dashboard";
+    }
+
+    @GetMapping("/user-profile")
+    public String profile() {
+        return "user-profile";
+    }
+
+    @GetMapping("/user-application")
+    public String applications() {
+        return "user-application";
+    }
+
+    @GetMapping("/user-internship")
+    public String internships() {
+        return "user-internship";
+    }
 }
