@@ -1,0 +1,12 @@
+@startuml
+start
+
+:Open Company Profile(in db company_name);
+:Edit company information;
+
+:Update companies table;
+
+:Show success message;
+
+stop
+@enduml

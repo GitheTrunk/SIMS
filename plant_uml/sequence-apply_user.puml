@@ -1,0 +1,28 @@
+@startuml
+actor Student
+participant "Student Profile\n(student_profiles)" as SP
+participant "Internships\n(internships)" as I
+participant "Applications\n(applications)" as A
+participant System
+
+Student -> System: Login
+System -> SP: Get student profile by user_id
+System -> Student: Display dashboard
+
+Student -> System: View available internships
+System -> I: Fetch internships from database
+I --> System: Return internships list
+System -> Student: Display internships list
+
+Student -> System: Select internship to apply
+System -> A: Check if application exists (student_id + internship_id)
+alt Already applied
+    A --> System: Application exists
+    System -> Student: Show message "Already applied"
+else Not applied
+    System -> A: Insert new application (student_id, internship_id, status=PENDING)
+    A --> System: Application created
+    System -> Student: Show message "Application submitted successfully"
+end
+
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+
+start
+
+:Student opens "My Applications Page";
+:System requests all applications for the student;
+
+if (Applications exist?) then (No)
+  :Show message "No applications found";
+else (Yes)
+  :Display list of applications;
+  :Show status for each application (Pending, Approved, Rejected);
+endif
+
+stop
+
+@enduml
+
+

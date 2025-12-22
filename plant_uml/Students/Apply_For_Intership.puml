@@ -1,0 +1,21 @@
+@startuml
+
+start
+
+:Open Internships Page;
+:Select Internship;
+
+if (Already applied?) then (Yes)
+  :Show Error "Already Applied";
+else (No)
+  if (Seats Available?) then (No)
+    :Show Error "No Seats Available";
+  else (Yes)
+    :Create Application Record;
+    :Show Success Message;
+  endif
+endif
+
+stop
+
+@enduml

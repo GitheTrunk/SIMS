@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+
+actor Company
+
+Company --> (Login)
+Company --> (Register)
+Company --> (Create Internship)
+Company --> (Review Applications)
+Company --> (Manage Company Profile)
+@enduml

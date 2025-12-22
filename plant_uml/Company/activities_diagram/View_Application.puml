@@ -1,0 +1,10 @@
+@startuml
+start
+
+:Select Internship;
+:Load applications list;
+
+:Display student applications;
+
+stop
+@enduml

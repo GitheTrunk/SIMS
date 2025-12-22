@@ -1,0 +1,15 @@
+@startuml
+start
+:Open login page;
+:Enter email & password;
+:Click login;
+
+if (Valid credentials?) then (Yes)
+  :Login success;
+  :Open Company Dashboard;
+else (No)
+  :Login failed;
+endif
+
+stop
+@enduml
