@@ -48,7 +48,7 @@ Supported env vars (with defaults shown in `application.properties`):
 Example `.env` (create at the project root):
 
 ```
-DB_NAME=sims_lead
+DB_NAME=sims_db
 DB_USERNAME=root
 DB_PASSWORD=yourStrongPassword
 ```
@@ -75,7 +75,7 @@ Example (macOS):
 ```bash
 # Insert a demo user directly into MySQL
 mysql -u "$DB_USERNAME" -p -D "$DB_NAME" -e \
-  "INSERT INTO users (name, email, role) VALUES ('Alice', 'alice@example.com', 'STUDENT');"
+  "INSERT INTO users (name, email, role) VALUES ('saturo', 'saturo@example.com', 'STUDENT');"
 ```
 
 Notes:
@@ -106,68 +106,88 @@ open build/reports/tests/test/index.html  # macOS
 | Layer | Tech |
 |-------|------|
 | **Frontend** | Thymeleaf, HTML5 |
-| **Backend** | Spring Boot 3, Spring Data JPA, Hibernate |
+| **Backend** | Spring Boot 3, Spring Data JPA, Hibernate, Spring Security |
+| **Authentication** | JWT (JSON Web Tokens) with jjwt library |
 | **Database** | MySQL 8.x, Flyway migrations |
 | **Build** | Gradle 8+, Java 21 |
 | **Config** | `.env` support via `java-dotenv` |
+| **File Upload** | Apache Commons IO, multipart support (max 10MB) |
 
 ### Data Model
 
-The project manages five core entities (built incrementally via migrations `V1`–`V6`):
+The project manages core entities built in V1 migration with authentication updates in V2:
 
-1. **Users** — Base entity for all system users (students, admins).
-   - Fields: `id`, `name`, `email`, `role`, `major`, `graduation_year`
-   - Repository: [UserRepository](src/main/java/com/example/sims/repository/UserRepository.java)
-   - Service: [UserService](src/main/java/com/example/sims/service/UserService.java)
+1. **Users** — Base entity for all system users (students, admins, companies).
+   - Fields: `id`, `email`, `username`, `password`, `role`, `active`, `created_at`
+   - Roles: `USER` (students), `ADMIN`, `COMPANY`
+   - Repository: [UserRepository](src/main/java/com/example/sims/repo/UserRepository.java)
+   - Service: [AuthService](src/main/java/com/example/sims/service/AuthService.java)
 
-2. **Companies** — Organizations offering internships.
-   - Migration: `V2__company_schema.sql`
+2. **Student Profiles** — Detailed student information linked to users.
+   - Fields: `id`, `user_id`, `student_code`, `full_name`, `major`, `year`, `cv_file`
 
-3. **Internships** — Internship programs under companies.
-   - Migration: `V3__internship_schema.sql`
+3. **Companies** — Organizations offering internships.
+   - Fields: `id`, `user_id`, `company_name`, `address`, `contact_email`, `contact_phone`
+   - Linked to Users for authentication
 
-4. **Applications** — Student applications for internships.
-   - Migration: `V4__application_schema.sql`
+4. **Internships** — Internship programs offered by companies.
+   - Fields: `id`, `company_id`, `title`, `description`, `location`, `seats`, `start_date`, `end_date`, `created_at`
 
-5. **Placements** — Outcomes of internship placements.
-   - Migration: `V5__placement_schema.sql`
+5. **Applications** — Student applications for internships.
+   - Fields: `id`, `student_id`, `internship_id`, `status` (PENDING/APPROVED/REJECTED), `applied_at`
 
-6. **Evaluations** — Performance evaluations for placed interns.
-   - Migration: `V6__evaluation_schema.sql`
+6. **Placements** — Outcomes of approved internship applications.
+   - Fields: `id`, `application_id`, `admin_id`, `placement_date`, `status` (PLACED/CANCELLED)
+
+7. **Evaluations** — Performance evaluations for placed interns.
+   - Fields: `id`, `placement_id`, `evaluator_id`, `score` (1-100), `remarks`, `evaluated_at`
+
+8. **Login Attempts** — Audit trail for authentication security.
+   - Fields: `id`, `user_id`, `attempt_time`, `success`
 
 ### Request Flow
 
 ```
 HTTP Request
     ↓
-Controller (HomeController, UserController)
+Controller (AuthController, HomeController)
     ↓
-Service (UserService)
+Service (AuthService, business logic)
     ↓
-Repository (UserRepository → JPA)
+Repository (JPA interfaces)
     ↓
-Hibernate/JPA Entity (User.java)
+Hibernate/JPA Entity (User.java, StudentProfile.java, etc.)
     ↓
 MySQL Database
 ```
 
-**Example:** `GET /users`
-1. `UserController.listUsers()` receives request.
-2. Calls `userRepository.findAll()`.
-3. JPA/Hibernate queries MySQL for all users.
-4. Results bound to Thymeleaf model.
-5. [users.html](src/main/resources/templates/clients/user.html) renders the list.
+**Example:** `POST /auth/login`
+1. `AuthController.login()` receives credentials.
+2. Calls `authService.authenticate()` for validation.
+3. Logs login attempt to `login_attempts` table.
+4. Returns JWT token on success or error message on failure.
+
+## Security & Authentication
+
+The project implements role-based access control (RBAC) with JWT token authentication:
+
+- **Roles**: `USER` (students), `ADMIN`, `COMPANY`
+- **Authentication**: Spring Security with JWT tokens (jjwt library)
+- **Password**: Stored securely; authentication managed by Spring Security
+- **Login Tracking**: All login attempts logged to `login_attempts` table for audit trails
+- **Configuration**: See [SecurityConfig](src/main/java/com/example/sims/config/SecurityConfig.java)
+
+The `AuthService` handles:
+- User authentication and validation
+- JWT token generation and validation
+- Login attempt recording
 
 ## What's in Each Migration
 
 | File | Purpose |
 |------|---------|
-| `V1__init_schema.sql` | Creates foundational tables (users, roles) |
-| `V2__company_schema.sql` | Adds company entities and relationships |
-| `V3__internship_schema.sql` | Defines internship programs per company |
-| `V4__application_schema.sql` | Tracks student applications to internships |
-| `V5__placement_schema.sql` | Records successful placements |
-| `V6__evaluation_schema.sql` | Stores performance evaluations |
+| `V1__sims_schema.sql` | Creates all foundational tables (users, student_profiles, companies, internships, applications, placements, evaluations, login_attempts) |
+| `V2__update_users_for_auth.sql` | Updates users table for authentication (adds username, changes enabled to active, updates role handling) |
 
 When the app starts, **Flyway automatically applies all pending migrations** in order, ensuring the schema is always in sync.
 
