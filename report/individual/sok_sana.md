@@ -19,7 +19,6 @@ I contributed to the SIMS backend by designing and implementing core Spring comp
 - **Entity:** Defined JPA entities (e.g., `UserEntity`, `StudentProfileEntity`, `InternshipEntity`, `CompanyEntity`, `ApplicationEntity`) with proper mappings, constraints, and lifecycle annotations.
 - **Repository:** Created Spring Data JPA repositories to provide typed CRUD operations and custom queries for user lookups, application retrieval, and internship listings.
 - **Service:** Implemented service-layer classes to host business rules, transaction boundaries, authentication logic, password hashing, and interactions between repositories and controllers.
-- **Migrations & Integration:** Coordinated DB migration (`V2__update_users_for_auth.sql`) to update user tables for authentication support and ensured templates and controllers match the updated schema.
 
 ---
 
