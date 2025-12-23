@@ -20,38 +20,36 @@ public class HomeController {
     @GetMapping("/")
     public String home(HttpServletRequest request, Model model) {
         String userEmail = (String) request.getAttribute("userEmail");
-        
+
         if (userEmail != null) {
             return "redirect:/dashboard";
         }
-        
+
         return "index";
     }
 
     @GetMapping("/dashboard")
     public String dashboard(HttpServletRequest request, Model model) {
         String userEmail = (String) request.getAttribute("userEmail");
-        
+
         if (userEmail == null) {
             return "redirect:/auth/login";
         }
-        
+
         UserEntity user = authService.getUserByEmail(userEmail);
         if (user == null) {
             return "redirect:/auth/login";
         }
-        
+
         model.addAttribute("user", user);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("role", user.getRole());
-        
+
         // Route to role-specific dashboard
         if ("ADMIN".equals(user.getRole())) {
             return "dashboard/admin-dashboard";
-        } else if ("COMPANY".equals(user.getRole())) {
-            return "dashboard/company-dashboard";
         }
-        
+
         // Default to user (student) dashboard
         return "dashboard/user-dashboard";
     }
