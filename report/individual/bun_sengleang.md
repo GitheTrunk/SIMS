@@ -151,13 +151,7 @@ Reviewed and organized existing UML diagrams:
 - ✅ Security scan completed
 
 #### Branches Merged
-1. **feature/authentication**: JWT-based auth system
-2. **feature/home-controller**: Landing page and dashboard routing
-3. **feature/user-dashboard**: Student dashboard UI
-4. **feature/admin-dashboard**: Admin dashboard UI
-5. **feature/database-v2**: Authentication schema updates
-6. **fix/redirect-loop**: Fixed authentication redirect issues
-7. **feature/logout**: Logout functionality implementation
+- From each team members
 
 **Merge Statistics:**
 - Total Merges: 15+
@@ -204,7 +198,6 @@ Reviewed and organized existing UML diagrams:
 
 **Communication Channels:**
 - GitHub: Code reviews, PR comments, issue discussions
-- Discord/Slack: Quick questions, daily updates
 - Documentation: Shared knowledge base, FAQs
 
 **Team Support Examples:**
@@ -356,8 +349,6 @@ While my primary role was coordination, I also made direct technical contributio
 ### Communication
 - GitHub comments and discussions
 - Team chat platforms
-- Email for formal communications
-
 ---
 
 ## Conclusion

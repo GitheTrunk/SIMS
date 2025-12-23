@@ -290,7 +290,6 @@ This component serves as a critical entry point for the application, ensuring us
 
 - [Spring Security Documentation](https://docs.spring.io/spring-security/reference/index.html)
 - [Spring MVC Controller Documentation](https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller.html)
-- [JWT Best Practices](https://datatracker.ietf.org/doc/html/rfc8725)
 - Project README: [`README.md`](../README.md)
 
 ---
