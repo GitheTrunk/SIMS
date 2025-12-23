@@ -1,4 +1,4 @@
-# Individual Report: Bun Sengleang
+# Individual Report: Sreng Sopheakanha
 
 **Project:** Student Internship Management System (SIMS)  
 **Date:** December 23, 2025  
