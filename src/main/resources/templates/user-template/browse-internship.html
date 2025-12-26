@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Internships - SIMS</title>
+    <style>
+        /* Shared Styles from Dashboard */
+        :root { --primary: #2563eb; --secondary: #7c3aed; --gray-bg: #f9fafb; --gray-text: #6b7280; --dark-text: #1f2937; }
+        body { margin: 0; font-family: Arial, sans-serif; background-color: var(--gray-bg); color: var(--dark-text); }
+        a { text-decoration: none; }
+        nav { background: linear-gradient(to right, var(--primary), var(--secondary)); padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; color: white; }
+        .logo { color: white; font-size: 1.5rem; font-weight: bold; }
+        .nav-links a { color: white; margin-left: 20px; }
+        .container { max-width: 1200px; margin: auto; padding: 32px; }
+
+        /* Page Specific */
+        .search-section { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 32px; display: flex; gap: 16px; }
+        input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px; }
+        .job-card { background: white; padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb; transition: transform 0.2s; }
+        .job-card:hover { transform: translateY(-4px); }
+        .company-logo { width: 48px; height: 48px; background: #eee; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary); }
+        .tag { display: inline-block; padding: 4px 12px; background: #eff6ff; color: var(--primary); border-radius: 20px; font-size: 0.8rem; margin-bottom: 12px; }
+        .btn { display: inline-block; padding: 10px 20px; background: var(--primary); color: white; border-radius: 6px; font-weight: 600; margin-top: 15px; }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="/" class="logo">📚 SIMS</a>
+    <div class="nav-links">
+        <a href="/user-dashboard">Dashboard</a>
+        <a href="/user-application">My Applications</a>
+        <a href="/user-profile">My profile</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Available Internships</h1>
+    <div class="search-section">
+        <input type="text" placeholder="Search by role, company, or keywords...">
+        <button class="btn" style="margin-top:0">Search</button>
+    </div>
+
+    <div class="grid">
+        <div class="job-card">
+            <div class="company-logo">G</div>
+            <div class="tag">Remote</div>
+            <h3>Software Engineer Intern</h3>
+            <p><strong>Google</strong> • Mountain View, CA</p>
+            <p class="gray-text">Work on large-scale distributed systems and develop high-performance code.</p>
+            <a href="#" class="btn">Apply Now</a>
+        </div>
+
+        <div class="job-card">
+            <div class="company-logo">M</div>
+            <div class="tag">Hybrid</div>
+            <h3>Product Design Intern</h3>
+            <p><strong>Microsoft</strong> • Redmond, WA</p>
+            <p class="gray-text">Join the UX team to craft beautiful interfaces for millions of users.</p>
+            <a href="#" class="btn">Apply Now</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

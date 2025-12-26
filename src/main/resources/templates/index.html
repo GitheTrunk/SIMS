@@ -1,55 +1,165 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIMS - Student Information Management System</title>
+
+    <!-- Styles -->
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* General body styling */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #1d4ed8, #9333ea); /* from-primary to-secondary */
             color: #333;
         }
-        .container {
-            background: white;
+
+        /* Card container */
+        .card-container {
+            background-color: #fff;
             padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             text-align: center;
-            max-width: 500px;
+            max-width: 800px;
+            width: 100%;
         }
+
+        /* Header */
         h1 {
-            color: #667eea;
-            font-size: 2.5rem;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #1d4ed8; /* primary */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
             margin-bottom: 1rem;
         }
-        .status {
-            display: inline-block;
-            background: #10b981;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-weight: 600;
-            margin: 1rem 0;
+
+        p.subtitle {
+            color: #6b7280; /* gray-600 */
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
         }
-        p {
-            color: #666;
+
+        .intro-text {
+            text-align: left;
+            color: #6b7280;
             line-height: 1.6;
-            margin-top: 1rem;
+            margin-bottom: 2.5rem;
         }
-        .info {
+
+        /* Feature grid */
+        .features {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        @media(min-width: 768px) {
+            .features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .feature-card {
+            background-color: #f9fafb; /* gray-50 */
+            padding: 1.5rem;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-0.5rem);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            color: #1f2937; /* gray-800 */
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        /* Buttons */
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        @media(min-width: 768px) {
+            .buttons {
+                flex-direction: row;
+            }
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(to right, #1d4ed8, #9333ea);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-0.25rem);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: white;
+            color: #1d4ed8;
+            border: 2px solid #1d4ed8;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-secondary:hover {
+            background: #1d4ed8;
+            color: white;
+            transform: translateY(-0.25rem);
+        }
+
+        /* Footer */
+        footer {
             margin-top: 2rem;
-            padding: 1rem;
-            background: #f3f4f6;
-            border-radius: 10px;
-        }
-        .info strong {
-            color: #667eea;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+            color: #9ca3af; /* gray-400 */
+            font-size: 0.875rem;
         }
         .links {
             margin-top: 2rem;
@@ -72,19 +182,62 @@
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>🎓 SIMS</h1>
-        <div class="status">✓ System Running</div>
-        <p>Student Information Management System is successfully initialized and ready to use.</p>
-        <div class="info">
-            <p><strong>Spring Boot:</strong> 3.4.0</p>
-            <p><strong>Java:</strong> 21</p>
-            <p><strong>Database:</strong> MySQL Connected</p>
+<div class="card-container">
+    <h1><span>📚</span>SIMS</h1>
+    <p class="subtitle">Student Internship Management System</p>
+
+    <div class="intro-text">
+        <p>Welcome to SIMS - Your comprehensive platform for managing student internships, connecting students with
+            companies, and streamlining the internship application process.</p>
+    </div>
+
+    <div class="features">
+        <div class="feature-card">
+            <div class="feature-icon">🎓</div>
+            <h3 class="feature-title">For Students</h3>
+            <p class="feature-desc">Browse and apply to internship opportunities</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3 class="feature-title">Track Applications</h3>
+            <p class="feature-desc">Monitor application status in real-time</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🛠️</div>
+            <h3 class="feature-title">Admin Management</h3>
+            <p class="feature-desc">Create and manage internship postings</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3 class="feature-title">Secure Platform</h3>
+            <p class="feature-desc">JWT-based authentication and authorization</p>
         </div>
         <div class="links">
             <a href="/users" class="btn">👥 View Users</a>
         </div>
     </div>
+
+    <div class="buttons">
+        <a href="/auth/login" class="btn-primary">Login</a>
+        <a href="/auth/register" class="btn-secondary">Register</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 SIMS. All rights reserved.</p>
+    </footer>
+</div>
+
+<!-- Script -->
+<script>
+    // Example JS: Log when login or register button clicked
+    document.querySelector('.btn-primary').addEventListener('click', () => {
+        console.log('Login button clicked');
+    });
+    document.querySelector('.btn-secondary').addEventListener('click', () => {
+        console.log('Register button clicked');
+    });
+</script>
 </body>
 </html>
