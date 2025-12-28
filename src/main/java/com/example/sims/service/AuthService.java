@@ -68,7 +68,7 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid password");
         }
 
-        return jwtTokenProvider.generateToken(email);
+        return jwtTokenProvider.generateToken(email, user.getRole());
     }
 
     public UserEntity getUserByEmail(String email) {

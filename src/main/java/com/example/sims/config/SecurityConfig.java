@@ -32,6 +32,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/auth/**", "/api/auth/**", "/css/**", "/js/**", "/images/**")
                         .permitAll()
+
+                        // RBAC
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/student/**").hasRole("USER")
+                        .requestMatchers("/api/company/**").hasRole("COMPANY")
+                        .requestMatchers("/dashboard").authenticated()
+                        
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form.disable())
