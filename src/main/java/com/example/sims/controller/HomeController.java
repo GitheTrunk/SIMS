@@ -48,6 +48,8 @@ public class HomeController {
         // Route to role-specific dashboard
         if ("ADMIN".equals(user.getRole())) {
             return "dashboard/admin-dashboard";
+        } else if ("COMPANY".equals(user.getRole())) {
+            return "redirect:/company/dashboard";
         }
 
         // Default to user (student) dashboard

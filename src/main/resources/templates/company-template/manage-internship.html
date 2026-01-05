@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Internships - SIMS</title>
+    <style>
+      :root {
+        --primary: #2563eb;
+        --secondary: #7c3aed;
+        --success: #16a34a;
+        --danger: #ef4444;
+        --bg: #f9fafb;
+        --text-dark: #1f2937;
+        --text-gray: #6b7280;
+        --border: #e5e7eb;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text-dark);
+      }
+
+      nav {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        padding: 16px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .nav-links {
+        display: flex;
+        gap: 24px;
+        align-items: center;
+      }
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .nav-links a:hover {
+        opacity: 0.8;
+      }
+      .logout-btn {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px 16px;
+        border-radius: 6px;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 32px;
+      }
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 8px;
+      }
+      .subtitle {
+        color: var(--text-gray);
+        margin-bottom: 32px;
+      }
+
+      .section {
+        background: white;
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th {
+        background: #f8fafc;
+        padding: 14px;
+        text-align: left;
+        font-weight: 600;
+        color: var(--text-gray);
+        border-bottom: 2px solid var(--border);
+      }
+      td {
+        padding: 14px;
+        border-bottom: 1px solid var(--border);
+      }
+      tr:hover {
+        background: #f9fafb;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #1d4ed8;
+      }
+      .btn-small {
+        padding: 6px 14px;
+        font-size: 0.875rem;
+      }
+      .btn-secondary {
+        background: var(--text-gray);
+        color: white;
+        margin-left: 8px;
+      }
+      .btn-danger {
+        background: var(--danger);
+        color: white;
+        margin-left: 8px;
+      }
+
+      .alert {
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 500;
+      }
+      .alert-success {
+        background: #d1fae5;
+        color: #065f46;
+        border-left: 4px solid var(--success);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-gray);
+      }
+      .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: 16px;
+        opacity: 0.5;
+      }
+
+      .internship-title {
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+      .internship-desc {
+        color: var(--text-gray);
+        font-size: 0.875rem;
+        margin-top: 4px;
+      }
+
+      .delete-form {
+        display: inline;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="logo">🏢 SIMS Company</div>
+      <div class="nav-links">
+        <a href="/company/dashboard">Dashboard</a>
+        <a href="/company/internships">My Internships</a>
+        <a href="/company/applications">Applications</a>
+        <a href="/company/profile">Profile</a>
+        <a href="/auth/logout" class="logout-btn">Logout</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1>Manage Internships</h1>
+      <p class="subtitle">Create and manage your internship postings</p>
+
+      <div
+        th:if="${success}"
+        class="alert alert-success"
+        th:text="${success}"
+      ></div>
+
+      <div class="section">
+        <div class="section-header">
+          <h2>Your Internship Postings</h2>
+          <a href="/company/internships/create" class="btn btn-primary"
+            >+ Create New Internship</a
+          >
+        </div>
+
+        <div th:if="${internships.isEmpty()}" class="empty-state">
+          <div class="empty-state-icon">📋</div>
+          <h3>No Internships Posted Yet</h3>
+          <p>
+            Start by creating your first internship posting to attract talented
+            students
+          </p>
+          <a
+            href="/company/internships/create"
+            class="btn btn-primary"
+            style="margin-top: 16px"
+            >Create First Internship</a
+          >
+        </div>
+
+        <table th:if="${!internships.isEmpty()}">
+          <thead>
+            <tr>
+              <th>Title & Description</th>
+              <th>Location</th>
+              <th>Seats</th>
+              <th>Duration</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="internship : ${internships}">
+              <td>
+                <div class="internship-title" th:text="${internship.title}">
+                  Software Engineer Intern
+                </div>
+                <div
+                  class="internship-desc"
+                  th:text="${#strings.abbreviate(internship.description, 60)}"
+                >
+                  Work on cutting-edge technology...
+                </div>
+              </td>
+              <td th:text="${internship.location}">Remote</td>
+              <td th:text="${internship.seats}">5</td>
+              <td>
+                <span
+                  th:text="${#temporals.format(internship.startDate, 'MMM dd')}"
+                  >Jan 15</span
+                >
+                -
+                <span
+                  th:text="${#temporals.format(internship.endDate, 'MMM dd, yyyy')}"
+                  >Jun 15, 2026</span
+                >
+              </td>
+              <td
+                th:text="${#temporals.format(internship.createdAt, 'MMM dd, yyyy')}"
+              >
+                Jan 05, 2026
+              </td>
+              <td>
+                <a
+                  th:href="@{/company/internships/{id}/edit(id=${internship.id})}"
+                  class="btn btn-primary btn-small"
+                  >✏️ Edit</a
+                >
+                <form
+                  th:action="@{/company/internships/{id}/delete(id=${internship.id})}"
+                  method="post"
+                  class="delete-form"
+                  onsubmit="return confirm('Are you sure you want to delete this internship? This action cannot be undone.');"
+                >
+                  <button type="submit" class="btn btn-danger btn-small">
+                    🗑️ Delete
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

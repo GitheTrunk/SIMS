@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Company Dashboard - SIMS</title>
+    <style>
+      /* CSS Variables & Base Styles */
+      :root {
+        --primary: #2563eb;
+        --secondary: #7c3aed;
+        --success: #16a34a;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --bg: #f9fafb;
+        --text-dark: #1f2937;
+        --text-gray: #6b7280;
+        --border: #e5e7eb;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text-dark);
+      }
+
+      /* Navigation */
+      nav {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        padding: 16px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .nav-links {
+        display: flex;
+        gap: 24px;
+        align-items: center;
+      }
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: opacity 0.2s;
+      }
+      .nav-links a:hover {
+        opacity: 0.8;
+      }
+      .logout-btn {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px 16px;
+        border-radius: 6px;
+      }
+
+      /* Container */
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 32px;
+      }
+
+      /* Header */
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 8px;
+      }
+      .subtitle {
+        color: var(--text-gray);
+        margin-bottom: 32px;
+      }
+
+      /* Stats Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 24px;
+        margin-bottom: 40px;
+      }
+      .stat-card {
+        background: white;
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .stat-icon {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+      }
+      .stat-label {
+        color: var(--text-gray);
+        font-size: 0.875rem;
+        margin-bottom: 8px;
+      }
+      .stat-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--text-dark);
+      }
+      .stat-link {
+        display: inline-block;
+        margin-top: 12px;
+        color: var(--primary);
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .stat-link:hover {
+        text-decoration: underline;
+      }
+
+      /* Section */
+      .section {
+        background: white;
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        margin-bottom: 24px;
+      }
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      /* Table */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th {
+        background: #f8fafc;
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        color: var(--text-gray);
+        border-bottom: 2px solid var(--border);
+      }
+      td {
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+      }
+      tr:hover {
+        background: #f9fafb;
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #1d4ed8;
+        transform: translateY(-2px);
+      }
+      .btn-success {
+        background: var(--success);
+        color: white;
+      }
+      .btn-secondary {
+        background: var(--text-gray);
+        color: white;
+      }
+
+      /* Badge */
+      .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .badge-pending {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .badge-approved {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .badge-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      /* Empty State */
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-gray);
+      }
+      .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: 16px;
+        opacity: 0.5;
+      }
+
+      /* Alert */
+      .alert {
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 500;
+      }
+      .alert-success {
+        background: #d1fae5;
+        color: #065f46;
+        border-left: 4px solid var(--success);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="logo">🏢 SIMS Company</div>
+      <div class="nav-links">
+        <a href="/company/dashboard">Dashboard</a>
+        <a href="/company/internships">My Internships</a>
+        <a href="/company/applications">Applications</a>
+        <a href="/company/profile">Profile</a>
+        <a href="/auth/logout" class="logout-btn">Logout</a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+      <h1>Welcome, <span th:text="${username}">Company Name</span>! 👋</h1>
+      <p class="subtitle">Company Dashboard</p>
+
+      <!-- Success Message -->
+      <div
+        th:if="${success}"
+        class="alert alert-success"
+        th:text="${success}"
+      ></div>
+
+      <!-- Statistics -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📋</div>
+          <div class="stat-label">Total Internships</div>
+          <div class="stat-value" th:text="${totalInternships}">0</div>
+          <a href="/company/internships" class="stat-link">Manage →</a>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">📨</div>
+          <div class="stat-label">Total Applications</div>
+          <div class="stat-value" th:text="${totalApplications}">0</div>
+          <a href="/company/applications" class="stat-link">View All →</a>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-label">Pending Review</div>
+          <div class="stat-value" th:text="${pendingApplications}">0</div>
+          <a href="/company/applications" class="stat-link">Review →</a>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-label">Active Positions</div>
+          <div class="stat-value" th:text="${totalInternships}">0</div>
+          <a href="/company/internships/create" class="stat-link"
+            >Create New →</a
+          >
+        </div>
+      </div>
+
+      <!-- Recent Internships -->
+      <div class="section">
+        <div class="section-header">
+          <h2>Recent Internship Postings</h2>
+          <a href="/company/internships/create" class="btn btn-primary"
+            >+ Create Internship</a
+          >
+        </div>
+
+        <div th:if="${recentInternships.isEmpty()}" class="empty-state">
+          <div class="empty-state-icon">📭</div>
+          <h3>No Internships Posted Yet</h3>
+          <p>Start by creating your first internship posting</p>
+          <a
+            href="/company/internships/create"
+            class="btn btn-primary"
+            style="margin-top: 16px"
+            >Create First Internship</a
+          >
+        </div>
+
+        <table th:if="${!recentInternships.isEmpty()}">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Location</th>
+              <th>Seats</th>
+              <th>Start Date</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="internship : ${recentInternships}">
+              <td>
+                <strong th:text="${internship.title}"
+                  >Software Engineer Intern</strong
+                >
+              </td>
+              <td th:text="${internship.location}">Remote</td>
+              <td th:text="${internship.seats}">5</td>
+              <td
+                th:text="${#temporals.format(internship.startDate, 'MMM dd, yyyy')}"
+              >
+                Jan 15, 2026
+              </td>
+              <td
+                th:text="${#temporals.format(internship.createdAt, 'MMM dd, yyyy')}"
+              >
+                Jan 05, 2026
+              </td>
+              <td>
+                <a
+                  th:href="@{/company/internships/{id}/edit(id=${internship.id})}"
+                  class="btn btn-secondary"
+                  style="padding: 6px 12px; font-size: 0.875rem"
+                  >Edit</a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="section">
+        <h2>Quick Actions</h2>
+        <div style="display: flex; gap: 16px; margin-top: 20px">
+          <a href="/company/internships/create" class="btn btn-primary"
+            >+ Create Internship</a
+          >
+          <a href="/company/applications" class="btn btn-secondary"
+            >Review Applications</a
+          >
+          <a href="/company/profile" class="btn btn-secondary"
+            >Update Profile</a
+          >
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
