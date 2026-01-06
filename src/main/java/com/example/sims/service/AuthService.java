@@ -42,7 +42,7 @@ public class AuthService {
         user = userRepository.save(user);
 
         // Create profile based on role
-        if ("USER".equals(role)) {
+        if ("USER".equals(role) || "STUDENT".equals(role)) {
             // Create student profile
             String studentCode = "STU-" + String.format("%05d", user.getId());
             StudentProfileEntity profile = new StudentProfileEntity(user, studentCode, username);
