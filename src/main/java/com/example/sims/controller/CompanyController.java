@@ -67,7 +67,7 @@ public class CompanyController {
         model.addAttribute("pendingApplications", pendingApplications);
         model.addAttribute("recentInternships", internships.stream().limit(5).toList());
 
-        return "company-template/company-dashboard";
+        return "dashboard/company-dashboard";
     }
 
     @GetMapping("/profile")
@@ -116,7 +116,7 @@ public class CompanyController {
         model.addAttribute("username", company.getCompanyName());
         model.addAttribute("internships", internships);
 
-        return "company-template/manage-internships";
+        return "company-template/manage-internship";
     }
 
     @GetMapping("/internships/create")
@@ -239,7 +239,7 @@ public class CompanyController {
         model.addAttribute("username", company.getCompanyName());
         model.addAttribute("applications", applications);
 
-        return "company-template/view-applications";
+        return "company-template/view-application";
     }
 
     @GetMapping("/applications/{id}")
