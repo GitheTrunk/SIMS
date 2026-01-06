@@ -30,7 +30,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/auth/**", "/api/auth/**", "/css/**", "/js/**", "/images/**")
+                        .requestMatchers("/", "/auth/**", "/api/auth/**", "/css/**", "/js/**", "/images/**",
+                                "/browse-internship", "/user-application", "/user-profile")
                         .permitAll()
 
                         // RBAC
@@ -38,7 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/student/**").hasRole("USER")
                         .requestMatchers("/api/company/**").hasRole("COMPANY")
                         .requestMatchers("/dashboard").authenticated()
-                        
+
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form.disable())

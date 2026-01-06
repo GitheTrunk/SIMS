@@ -53,4 +53,19 @@ public class HomeController {
         // Default to user (student) dashboard
         return "dashboard/user-dashboard";
     }
+
+    @GetMapping("/browse-internship")
+    public String browseInternship() {
+        return "user-template/browse-internship";
+    }
+
+    @GetMapping("/user-application")
+    public String userApplication(){
+        return "user-template/user-application";
+    }
+
+    @GetMapping("/user-profile")
+    public String userProfile(){
+        return "user-template/user-profile";
+    }
 }
