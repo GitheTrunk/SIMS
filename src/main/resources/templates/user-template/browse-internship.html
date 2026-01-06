@@ -5,13 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browse Internships - SIMS</title>
     <style>
-        /* Shared Styles from Dashboard */
+
         :root { --primary: #2563eb; --secondary: #7c3aed; --gray-bg: #f9fafb; --gray-text: #6b7280; --dark-text: #1f2937; }
         body { margin: 0; font-family: Arial, sans-serif; background-color: var(--gray-bg); color: var(--dark-text); }
         a { text-decoration: none; }
-        nav { background: linear-gradient(to right, var(--primary), var(--secondary)); padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; color: white; }
-        .logo { color: white; font-size: 1.5rem; font-weight: bold; }
-        .nav-links a { color: white; margin-left: 20px; }
+
+        /* Navbar */
+        nav {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+
+        /* Hamburger */
+        .hamburger { display: none; flex-direction: column; background: none; border: none; cursor: pointer; gap: 5px; }
+        .hamburger span { width: 26px; height: 3px; background: white; border-radius: 2px; transition: all 0.3s; }
+        .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a { color: white; padding: 10px 16px; border-radius: 6px; transition: background 0.3s; }
+        .nav-links a:hover { background: rgba(255,255,255,0.2); }
+
         .container { max-width: 1200px; margin: auto; padding: 32px; }
 
         /* Page Specific */
@@ -23,17 +60,73 @@
         .company-logo { width: 48px; height: 48px; background: #eee; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary); }
         .tag { display: inline-block; padding: 4px 12px; background: #eff6ff; color: var(--primary); border-radius: 20px; font-size: 0.8rem; margin-bottom: 12px; }
         .btn { display: inline-block; padding: 10px 20px; background: var(--primary); color: white; border-radius: 6px; font-weight: 600; margin-top: 15px; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+                padding: 12px 20px;
+                gap: 0;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 60px;
+                right: 10px;
+                width: 200px;
+                background: linear-gradient(to right, var(--primary), var(--secondary));
+                flex-direction: column;
+                gap: 0;
+                display: none;
+                padding: 0;
+                border-radius: 10px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 14px 20px;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+        }
+        .BI{
+            background: blue;
+        }
     </style>
 </head>
 <body>
+
+
 <nav>
-    <a href="/" class="logo">📚 SIMS</a>
-    <div class="nav-links">
-        <a href="/user-dashboard">Dashboard</a>
-        <a href="/user-application">My Applications</a>
-        <a href="/user-profile">My profile</a>
+    <div class="nav-container">
+        <a href="/" class="logo">📚 SIMS</a>
+
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="nav-links" id="navLinks">
+            <a href="/user-dashboard">Dashboard</a>
+            <a class="BI">Browse Internships</a>
+            <a href="/user-application">My Applications</a>
+            <a href="/user-profile">Profile</a>
+        </div>
+
     </div>
 </nav>
+
 
 <div class="container">
     <h1>Available Internships</h1>
@@ -62,5 +155,19 @@
         </div>
     </div>
 </div>
+<script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navLinks.classList.toggle('active');
+    });
+    navLinks.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+        }
+    });
+</script>
 </body>
 </html>
