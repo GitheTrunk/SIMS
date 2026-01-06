@@ -12,17 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 
-public class HomeController {
+@RequestMapping("/student")
+public class StudentController {
     private final AuthService authService;
 
-    public HomeController(AuthService authService) {
+    public StudentController(AuthService authService){
         this.authService = authService;
-    }
-
-    @GetMapping("/")
-    public String home(HttpServletRequest request, Model model) {
-
-        return "index";
     }
 
     @GetMapping("/dashboard")
@@ -40,20 +35,24 @@ public class HomeController {
 
         model.addAttribute("user", user);
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("role", user.getRole());
-
-        // Route to role-specific dashboard
-        if ("ADMIN".equals(user.getRole())) {
-            return "dashboard/admin-dashboard";
-        } else if ("COMPANY".equals(user.getRole())) {
-            return "redirect:/company/dashboard";
-        }
 
         // Default to user (student) dashboard
-        return "redirect:/student/dashboard";
+        return "dashboard/user-dashboard";
     }
 
+    @GetMapping("/browse-internship")
+    public String browseInternship() {
+        return "user-template/browse-internship";
+    }
 
+    @GetMapping("/user-application")
+    public String userApplication() {
+        return "user-template/user-application";
+    }
 
+    @GetMapping("/user-profile")
+    public String userProfile() {
+        return "user-template/user-profile";
+    }
 
 }

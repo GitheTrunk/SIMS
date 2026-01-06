@@ -353,9 +353,9 @@
 
         <div class="nav-links" id="navLinks">
             <a class="dashboard">Dashboard</a>
-            <a href="/browse-internship">Browse Internships</a>
-            <a href="/user-application">My Applications</a>
-            <a href="/user-profile">Profile</a>
+            <a href="/student/browse-internship">Browse Internships</a>
+            <a href="/student/user-application">My Applications</a>
+            <a href="/student/user-profile">Profile</a>
 
             <div class="nav-user" id="navUser">
                 <div>
@@ -371,7 +371,7 @@
 
 <!-- MAIN -->
 <div class="container">
-    <h1>Welcome, <span th:text="${username}"></span>! 👋</h1>
+    <h1>Welcome, <span th:text="${username}"></span>!</h1>
     <p class="subtitle">Your Student Dashboard</p>
 
     <!-- STATS -->
@@ -381,7 +381,7 @@
             <h3>My Applications</h3>
             <div class="card-number">0</div>
             <p>Internship applications submitted</p>
-            <a href="#" class="btn">View All</a>
+            <a href="/student/user-application" class="btn">View All</a>
         </div>
 
         <div class="card">
@@ -405,7 +405,7 @@
             <h3>Available</h3>
             <div class="card-number">24</div>
             <p>Active internship positions</p>
-            <a href="#" class="btn">Browse</a>
+            <a href="/student/browse-internship" class="btn">Browse</a>
         </div>
     </div>
 
@@ -415,7 +415,7 @@
         <div style="font-size:4rem">📭</div>
         <h3>No Applications Yet</h3>
         <p>You haven't applied to any internships yet.</p>
-        <a href="#" class="btn">Browse Internships</a>
+        <a href="/student/browse-internship" class="btn">Browse Internships</a>
     </div>
 
     <!-- PROFILE -->
@@ -427,14 +427,16 @@
                 <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
                 <p><strong>Student ID:</strong> STU-<span th:text="${user.id}"></span></p>
             </div>
+            <!--
             <div>
                 <p><strong>Major:</strong> Computer Science</p>
                 <p><strong>Year:</strong> Junior</p>
                 <p><strong>Status:</strong> Active</p>
             </div>
+            -->
         </div>
 
-        <a class="btn">Edit Profile</a>
+        <a href="/student/user-profile" class="btn">Edit Profile</a>
         <a class="btn btn-gray">Upload CV</a>
     </div>
 </div>
@@ -464,4 +466,3 @@
 </script>
 
 </body>
-</html>
