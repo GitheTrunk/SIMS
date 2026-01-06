@@ -8,10 +8,9 @@ import com.example.sims.entity.UserEntity;
 import com.example.sims.service.AuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.web.bind.annotation.RequestMapping;
+
 
 @Controller
-
 public class HomeController {
     private final AuthService authService;
 

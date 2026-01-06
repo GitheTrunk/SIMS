@@ -108,17 +108,11 @@
             <p style="color:#6b7280">Computer Science Student</p>
         </div>
         <div class="profile-body">
-            <form method="POST">
+            <form>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div class="form-group">
-                        <label for="fullName">Full Name</label>
-                        <input
-                                type="text"
-                                id="fullName"
-                                name="fullName"
-                                th:value="${user.fullname}"
-                                required
-                        />
+                        <label>Full Name</label>
+                        <input type="text">
                     </div>
                     <div class="form-group">
                         <label>Email Address</label>
