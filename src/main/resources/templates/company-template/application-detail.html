@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Application Detail - SIMS</title>
+    <style>
+      :root {
+        --primary: #2563eb;
+        --secondary: #7c3aed;
+        --success: #16a34a;
+        --danger: #ef4444;
+        --bg: #f9fafb;
+        --text-dark: #1f2937;
+        --text-gray: #6b7280;
+        --border: #e5e7eb;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text-dark);
+      }
+
+      nav {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        padding: 16px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .nav-links {
+        display: flex;
+        gap: 24px;
+        align-items: center;
+      }
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .logout-btn {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px 16px;
+        border-radius: 6px;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 32px;
+      }
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 8px;
+      }
+      .subtitle {
+        color: var(--text-gray);
+        margin-bottom: 32px;
+      }
+
+      .detail-card {
+        background: white;
+        padding: 32px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        margin-bottom: 24px;
+      }
+
+      .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .info-label {
+        font-weight: 600;
+        color: var(--text-gray);
+      }
+
+      .info-value {
+        color: var(--text-dark);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+      }
+      .badge-pending {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .badge-approved {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .badge-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+        transition: all 0.2s;
+      }
+      .btn-success {
+        background: var(--success);
+        color: white;
+        margin-right: 12px;
+      }
+      .btn-danger {
+        background: var(--danger);
+        color: white;
+        margin-right: 12px;
+      }
+      .btn-secondary {
+        background: var(--text-gray);
+        color: white;
+      }
+
+      .action-form {
+        display: inline;
+      }
+
+      .description-box {
+        background: #f8fafc;
+        padding: 16px;
+        border-radius: 8px;
+        border-left: 4px solid var(--primary);
+        margin-top: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="logo">🏢 SIMS Company</div>
+      <div class="nav-links">
+        <a href="/company/dashboard">Dashboard</a>
+        <a href="/company/internships">My Internships</a>
+        <a href="/company/applications">Applications</a>
+        <a href="/company/profile">Profile</a>
+        <a href="/auth/logout" class="logout-btn">Logout</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1>Application Details</h1>
+      <p class="subtitle">Review student application information</p>
+
+      <!-- Student Information -->
+      <div class="detail-card">
+        <h2 class="section-title">👤 Student Information</h2>
+        <div class="info-grid">
+          <div class="info-label">Full Name:</div>
+          <div class="info-value" th:text="${application.student.fullName}">
+            John Doe
+          </div>
+
+          <div class="info-label">Student Code:</div>
+          <div class="info-value" th:text="${application.student.studentCode}">
+            STU001
+          </div>
+
+          <div class="info-label">Major:</div>
+          <div class="info-value" th:text="${application.student.major}">
+            Computer Science
+          </div>
+
+          <div class="info-label">Year:</div>
+          <div class="info-value" th:text="${application.student.year}">
+            Junior
+          </div>
+
+          <div class="info-label">CV:</div>
+          <div class="info-value">
+            <a
+              th:if="${application.student.cvFile}"
+              th:href="${application.student.cvFile}"
+              style="color: var(--primary); font-weight: 600"
+              >📄 Download CV</a
+            >
+            <span
+              th:unless="${application.student.cvFile}"
+              style="color: var(--text-gray)"
+              >Not provided</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Internship Information -->
+      <div class="detail-card">
+        <h2 class="section-title">💼 Internship Information</h2>
+        <div class="info-grid">
+          <div class="info-label">Position:</div>
+          <div class="info-value" th:text="${application.internship.title}">
+            Software Engineer Intern
+          </div>
+
+          <div class="info-label">Location:</div>
+          <div class="info-value" th:text="${application.internship.location}">
+            Remote
+          </div>
+
+          <div class="info-label">Duration:</div>
+          <div class="info-value">
+            <span
+              th:text="${#temporals.format(application.internship.startDate, 'MMM dd, yyyy')}"
+              >Jan 15, 2026</span
+            >
+            -
+            <span
+              th:text="${#temporals.format(application.internship.endDate, 'MMM dd, yyyy')}"
+              >Jun 15, 2026</span
+            >
+          </div>
+
+          <div class="info-label">Seats Available:</div>
+          <div class="info-value" th:text="${application.internship.seats}">
+            5
+          </div>
+        </div>
+
+        <div class="description-box">
+          <strong>Job Description:</strong>
+          <p
+            th:text="${application.internship.description}"
+            style="margin-top: 8px"
+          >
+            Internship description goes here...
+          </p>
+        </div>
+      </div>
+
+      <!-- Application Status -->
+      <div class="detail-card">
+        <h2 class="section-title">📋 Application Status</h2>
+        <div class="info-grid">
+          <div class="info-label">Applied On:</div>
+          <div
+            class="info-value"
+            th:text="${#temporals.format(application.appliedAt, 'MMM dd, yyyy HH:mm')}"
+          >
+            Jan 05, 2026 10:30
+          </div>
+
+          <div class="info-label">Current Status:</div>
+          <div class="info-value">
+            <span
+              class="badge"
+              th:classappend="${application.status.name() == 'PENDING'} ? 'badge-pending' : (${application.status.name() == 'APPROVED'} ? 'badge-approved' : 'badge-rejected')"
+              th:text="${application.status.name()}"
+              >PENDING</span
+            >
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div
+          style="
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+          "
+        >
+          <form
+            th:if="${application.status.name() == 'PENDING'}"
+            th:action="@{/company/applications/{id}/approve(id=${application.id})}"
+            method="post"
+            class="action-form"
+            onsubmit="return confirm('Are you sure you want to approve this application?');"
+          >
+            <button type="submit" class="btn btn-success">
+              ✅ Approve Application
+            </button>
+          </form>
+
+          <form
+            th:if="${application.status.name() == 'PENDING'}"
+            th:action="@{/company/applications/{id}/reject(id=${application.id})}"
+            method="post"
+            class="action-form"
+            onsubmit="return confirm('Are you sure you want to reject this application?');"
+          >
+            <button type="submit" class="btn btn-danger">
+              ❌ Reject Application
+            </button>
+          </form>
+
+          <a href="/company/applications" class="btn btn-secondary"
+            >← Back to Applications</a
+          >
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
