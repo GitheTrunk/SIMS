@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -423,21 +424,18 @@
     <div class="profile">
         <div class="profile-grid">
             <div>
-                <p><strong>Name:</strong> <span th:text="${username}"></span></p>
-                <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
-                <p><strong>Student ID:</strong> STU-<span th:text="${user.id}"></span></p>
+                <p><strong>Name:</strong> <span th:text="${fullname != null ? fullname : username}"></span></p>
+                <p><strong>Email:</strong> <span th:text="${email}"></span></p>
+                <p><strong>Student Code:</strong> <span th:text="${studentCode != null ? studentCode : 'Not Set'}"></span></p>
             </div>
-            <!--
             <div>
-                <p><strong>Major:</strong> Computer Science</p>
-                <p><strong>Year:</strong> Junior</p>
+                <p><strong>Major:</strong> <span th:text="${major != null ? major : 'Not Set'}"></span></p>
+                <p><strong>Year:</strong> <span th:text="${year != null ? year : 'Not Set'}"></span></p>
                 <p><strong>Status:</strong> Active</p>
             </div>
-            -->
         </div>
 
         <a href="/student/user-profile" class="btn">Edit Profile</a>
-        <a class="btn btn-gray">Upload CV</a>
     </div>
 </div>
 
