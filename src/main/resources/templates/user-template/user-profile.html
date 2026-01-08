@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -33,7 +34,19 @@
            .form-group { margin-bottom: 24px; }
            label { display: block; margin-bottom: 8px; font-weight: 600; color: #374151; }
            input, select { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; }
-           .btn-save { background: var(--primary); color: white; border: none; padding: 12px 32px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+           input[type="file"] { width: 100%; padding: 12px; border: 2px dashed #d1d5db; border-radius: 8px; box-sizing: border-box; cursor: pointer; }
+           input[type="file"]:hover { border-color: var(--primary); }
+           .btn-save { display: inline-flex; align-items: center; justify-content: center; background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; min-width: 96px; }
+           .btn-save:hover { background: #1d4ed8; }
+           .btn-save .btn-text { display: inline-block; font-size: 0.95rem; line-height: 1; }
+           .btn-secondary { background: #6b7280; color: white; padding: 12px 32px; border-radius: 8px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; border: none; }
+           .btn-secondary:hover { background: #4b5563; }
+           .cv-section { background: #f0f4ff; padding: 20px; border-radius: 8px; margin-bottom: 24px; border-left: 4px solid var(--primary); }
+           .cv-section h3 { margin-top: 0; color: var(--primary); }
+           .file-info { background: #f3f4f6; padding: 12px; border-radius: 8px; margin-top: 8px; font-size: 0.9rem; color: #6b7280; }
+           .cv-file-display { background: white; padding: 12px; border-radius: 8px; margin: 12px 0; border: 1px solid #d1d5db; display: flex; justify-content: space-between; align-items: center; }
+           .cv-file-display a { color: var(--primary); text-decoration: underline; }
+           .cv-file-display a:hover { color: #1d4ed8; }
 
            /* Responsive */
            @media (max-width: 768px) {
@@ -105,36 +118,77 @@
     <div class="profile-card">
         <div class="profile-header">
             <div class="avatar">👤</div>
-            <p style="color:#6b7280">Computer Science Student</p>
+            <p style="color:#6b7280" th:text="${student.fullName}">Student Name</p>
         </div>
         <div class="profile-body">
-            <form>
+            <!-- Success Message -->
+            <div th:if="${success}" style="background: #d1fae5; color: #065f46; padding: 12px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #10b981;">
+                <strong>✓</strong> <span th:text="${success}"></span>
+            </div>
+
+            <form method="post" action="/student/edit-profile">
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div class="form-group">
                         <label>Full Name</label>
-                        <input type="text">
+                        <input type="text" name="fullname" th:value="${fullname}" required>
                     </div>
                     <div class="form-group">
                         <label>Email Address</label>
-                        <div th:text="${email}"></div>
-                        <input type="email">
+                        <input type="email" th:value="${email}" readonly style="background-color: #f3f4f6; cursor: not-allowed;">
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label>Major</label>
+                        <input type="text" name="major" th:value="${major}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Student Code</label>
+                        <input type="text" th:value="${studentCode}" readonly style="background-color: #f3f4f6; cursor: not-allowed;">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Major</label>
-                    <select>
-                        <option>Computer Science</option>
-                        <option>Information Technology</option>
-                        <option>Data Science</option>
-                    </select>
+                    <label>Year</label>
+                    <input type="number" name="year" th:value="${year}" min="1" max="10" required>
                 </div>
 
-                <div class="form-group">
-                    <label>Bio</label>
-                    <textarea style="width:100%; height:100px; border-radius:8px; border:1px solid #d1d5db; padding:12px;" placeholder="Tell us about yourself..."></textarea>
+                <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+                    <button type="submit" class="btn-save">Save Changes</button>
+                    <a href="/student/dashboard" class="btn-secondary">Cancel</a>
                 </div>
-                <button type="submit" class="btn-save">Save Changes</button>
             </form>
+
+            <!-- CV Upload Section -->
+            <div class="cv-section">
+                <h3>📄 Curriculum Vitae (CV)</h3>
+
+                <!-- Current CV Display -->
+                <div th:if="${cvFile}">
+                    <p style="margin: 0 0 12px 0; color: #374151;"><strong>Current CV:</strong></p>
+                    <div class="cv-file-display" style="display: flex; gap: 12px; align-items: center; margin-bottom: 24px;">
+                        <span th:text="${cvFile}" style="flex: 1;"></span>
+                            <form method="get" action="/student/view-cv" target="_blank" style="margin:0">
+                                <button type="submit" class="btn-save" style="margin:0;">
+                                    <span class="btn-text">View CV</span>
+                                </button>
+                            </form>
+                    </div>
+                </div>
+
+                <!-- Single Upload Form (works for new and replacement). Use a visible button that triggers hidden file input and auto-submits. -->
+                <form id="cvUploadForm" method="post" action="/student/upload-cv" enctype="multipart/form-data" style="display:flex; gap:12px; align-items:center;">
+                    <input type="file" id="cvUploadInput" name="cvFile" accept=".pdf,.doc,.docx" style="display:none;" />
+                    <label for="cvUploadInput" class="btn-save" style="margin:0; cursor:pointer;">
+                        <span th:if="${cvFile}">Upload New CV</span>
+                        <span th:if="!${cvFile}">Upload CV</span>
+                    </label>
+                    <div style="flex:1; font-size:0.95rem; color:#374151;">
+                        <div class="file-info" style="margin-top:6px;">
+                            ✓ Supported formats: PDF, DOC, DOCX — Max 5MB
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -151,6 +205,19 @@
             navLinks.classList.remove('active');
         }
     });
+    
+    // Auto-submit CV upload when a file is chosen
+    const cvInput = document.getElementById('cvUploadInput');
+    const cvForm = document.getElementById('cvUploadForm');
+    if (cvInput && cvForm) {
+        cvInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                cvForm.submit();
+            }
+        });
+    }
 </script>
 </body>
 </html>
+
+
