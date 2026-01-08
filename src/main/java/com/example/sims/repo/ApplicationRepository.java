@@ -1,6 +1,7 @@
 package com.example.sims.repo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +30,7 @@ public interface ApplicationRepository extends JpaRepository<ApplicationEntity, 
 
     @Query("SELECT COUNT(a) FROM ApplicationEntity a WHERE a.student.id = :studentId AND a.status = 'PENDING'")
     Long countPendingByStudentId(@Param("studentId") Long studentId);
+
+    @Query("SELECT a FROM ApplicationEntity a WHERE a.student.id = :studentId AND a.internship.id = :internshipId")
+    Optional<ApplicationEntity> findByStudentIdAndInternshipId(@Param("studentId") Long studentId, @Param("internshipId") Long internshipId);
 }

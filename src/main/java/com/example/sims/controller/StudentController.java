@@ -2,6 +2,7 @@
 package com.example.sims.controller;
 
 import java.util.Optional;
+import java.util.List;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +23,8 @@ import org.springframework.http.ResponseEntity;
 
 import com.example.sims.entity.StudentProfileEntity;
 import com.example.sims.entity.UserEntity;
+import com.example.sims.entity.InternshipEntity;
+import com.example.sims.entity.ApplicationEntity;
 import com.example.sims.service.AuthService;
 import com.example.sims.service.StudentService;
 
@@ -54,32 +58,57 @@ public class StudentController {
 
     @GetMapping("/dashboard")
     public String dashboard(HttpServletRequest request, Model model) {
+        // 1. Get Authentication
         String userEmail = (String) request.getAttribute("userEmail");
-
-        if (userEmail == null) {
+        if (userEmail == null)
             return "redirect:/auth/login";
-        }
 
         UserEntity user = authService.getUserByEmail(userEmail);
-        if (user == null) {
+        if (user == null)
             return "redirect:/auth/login";
-        }
 
-        model.addAttribute("user", user);
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("email", userEmail);
-
-        // Add student profile data
+        // 2. Get Student Profile
         StudentProfileEntity student = getAuthenticatedStudent(request);
+
         if (student != null) {
+            // Fetch student's specific applications
+            List<ApplicationEntity> apps = studentService.getStudentApplications(student.getId());
+            model.addAttribute("applications", apps);
+            model.addAttribute("applicationCount", apps.size());
+
+            // --- START NEW LOGIC FOR AVAILABLE INTERNSHIPS ---
+            // Fetch all internships available in the system
+            List<InternshipEntity> allInternships = studentService.getAllInternships();
+
+            // Calculate Available: Total system internships - Number student applied for
+            int availableCount = Math.max(0, allInternships.size() - apps.size());
+            model.addAttribute("availableCount", availableCount);
+            // --- END NEW LOGIC ---
+
+            // Count Approved
+            long approvedCount = apps.stream()
+                    .filter(a -> a.getStatus() == ApplicationEntity.ApplicationStatus.APPROVED)
+                    .count();
+            model.addAttribute("approvedCount", approvedCount);
+
+            // Count Pending
+            long pendingCount = apps.stream()
+                    .filter(a -> a.getStatus() == ApplicationEntity.ApplicationStatus.PENDING)
+                    .count();
+            model.addAttribute("pendingCount", pendingCount);
+
+            // Profile data
             model.addAttribute("student", student);
             model.addAttribute("fullname", student.getFullName());
             model.addAttribute("major", student.getMajor());
             model.addAttribute("year", student.getYear());
             model.addAttribute("studentCode", student.getStudentCode());
+            model.addAttribute("email", userEmail);
         }
 
-        // Default to user (student) dashboard
+        model.addAttribute("user", user);
+        model.addAttribute("username", user.getUsername());
+
         return "dashboard/user-dashboard";
     }
 
@@ -89,9 +118,7 @@ public class StudentController {
         if (student == null) {
             return "redirect:/auth/login";
         }
-
         String userEmail = (String) request.getAttribute("userEmail");
-
         model.addAttribute("student", student);
         model.addAttribute("email", userEmail);
         model.addAttribute("fullname", student.getFullName());
@@ -104,10 +131,10 @@ public class StudentController {
 
     @PostMapping("/edit-profile")
     public String editProfile(HttpServletRequest request,
-                              @RequestParam String fullname,
-                              @RequestParam String major,
-                              @RequestParam Integer year,
-                              RedirectAttributes redirectAttributes) {
+            @RequestParam String fullname,
+            @RequestParam String major,
+            @RequestParam Integer year,
+            RedirectAttributes redirectAttributes) {
         StudentProfileEntity student = getAuthenticatedStudent(request);
         if (student == null) {
             return "redirect:/auth/login";
@@ -123,13 +150,132 @@ public class StudentController {
     }
 
     @GetMapping("/browse-internship")
-    public String browseInternship() {
+    public String browseInternship(HttpServletRequest request, Model model) {
+        // Add authenticated student info (if available)
+        StudentProfileEntity student = getAuthenticatedStudent(request);
+        if (student != null) {
+            model.addAttribute("student", student);
+        }
+
+        // Load internships for students to browse
+        model.addAttribute("internships", studentService.getAllInternships());
         return "user-template/browse-internship";
     }
 
     @GetMapping("/user-application")
-    public String userApplication() {
+    public String userApplication(HttpServletRequest request, Model model) {
+        StudentProfileEntity student = getAuthenticatedStudent(request);
+        if (student == null) {
+            return "redirect:/auth/login";
+        }
+
+        // Fetch all applications for this student
+        model.addAttribute("student", student);
+        model.addAttribute("applications", studentService.getStudentApplications(student.getId()));
         return "user-template/user-application";
+    }
+
+    @GetMapping("/user-application/pending")
+    public String viewPendingApplications(HttpServletRequest request, Model model) {
+        StudentProfileEntity student = getAuthenticatedStudent(request);
+        if (student == null)
+            return "redirect:/auth/login";
+
+        List<ApplicationEntity> allApps = studentService.getStudentApplications(student.getId());
+
+        // Filter logic
+        List<ApplicationEntity> pendingApps = allApps.stream()
+                .filter(a -> a.getStatus() == ApplicationEntity.ApplicationStatus.PENDING)
+                .toList();
+
+        model.addAttribute("applications", pendingApps);
+        model.addAttribute("student", student);
+
+        // Make sure this matches your filename exactly
+        return "user-template/pending-application";
+    }
+
+    @GetMapping("/user-application/approved")
+    public String viewApprovedApplications(HttpServletRequest request, Model model) {
+        StudentProfileEntity student = getAuthenticatedStudent(request);
+        if (student == null)
+            return "redirect:/auth/login";
+
+        List<ApplicationEntity> allApps = studentService.getStudentApplications(student.getId());
+
+        // Filter for APPROVED status only
+        List<ApplicationEntity> approvedApps = allApps.stream()
+                .filter(a -> a.getStatus() == ApplicationEntity.ApplicationStatus.APPROVED)
+                .toList();
+
+        model.addAttribute("applications", approvedApps);
+        model.addAttribute("student", student);
+        return "user-template/approved-application";
+    }
+
+    @GetMapping("/apply/{internshipId}")
+    public String applyForm(@PathVariable Long internshipId, HttpServletRequest request, Model model) {
+        StudentProfileEntity student = getAuthenticatedStudent(request);
+        if (student == null) {
+            return "redirect:/auth/login";
+        }
+
+        Optional<InternshipEntity> internshipOpt = studentService.getInternshipById(internshipId);
+        if (!internshipOpt.isPresent()) {
+            return "redirect:/student/browse-internship";
+        }
+
+        InternshipEntity internship = internshipOpt.get();
+
+        // Check if student has already applied
+        Optional<ApplicationEntity> existingApp = studentService.getStudentApplicationForInternship(student.getId(),
+                internshipId);
+        if (existingApp.isPresent()) {
+            return "redirect:/student/browse-internship";
+        }
+
+        model.addAttribute("student", student);
+        model.addAttribute("internship", internship);
+        return "user-template/apply-internship";
+    }
+
+    @PostMapping("/apply/{internshipId}")
+    public String submitApplication(@PathVariable Long internshipId,
+            HttpServletRequest request,
+            @RequestParam String coverLetter,
+            RedirectAttributes redirectAttributes) {
+        StudentProfileEntity student = getAuthenticatedStudent(request);
+        if (student == null) {
+            return "redirect:/auth/login";
+        }
+
+        Optional<InternshipEntity> internshipOpt = studentService.getInternshipById(internshipId);
+        if (!internshipOpt.isPresent()) {
+            redirectAttributes.addFlashAttribute("error", "Internship not found");
+            return "redirect:/student/browse-internship";
+        }
+
+        InternshipEntity internship = internshipOpt.get();
+
+        // Check if student has already applied
+        Optional<ApplicationEntity> existingApp = studentService.getStudentApplicationForInternship(student.getId(),
+                internshipId);
+        if (existingApp.isPresent()) {
+            redirectAttributes.addFlashAttribute("error", "You have already applied for this internship");
+            return "redirect:/student/browse-internship";
+        }
+
+        try {
+            ApplicationEntity application = new ApplicationEntity(student, internship);
+            application.setCoverLetter(coverLetter);
+            studentService.createApplication(application);
+
+            redirectAttributes.addFlashAttribute("success", "Application submitted successfully!");
+            return "redirect:/student/user-application";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to submit application: " + e.getMessage());
+            return "redirect:/student/browse-internship";
+        }
     }
 
     @GetMapping("/upload-cv")
@@ -146,8 +292,8 @@ public class StudentController {
 
     @PostMapping("/upload-cv")
     public String uploadCv(HttpServletRequest request,
-                           @RequestParam("cvFile") MultipartFile file,
-                           RedirectAttributes redirectAttributes) {
+            @RequestParam("cvFile") MultipartFile file,
+            RedirectAttributes redirectAttributes) {
         StudentProfileEntity student = getAuthenticatedStudent(request);
         if (student == null) {
             return "redirect:/auth/login";
