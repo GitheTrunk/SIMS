@@ -45,6 +45,10 @@ public class StudentService {
         return applicationRepository.findByStudentId(studentId);
     }
 
+    public Optional<ApplicationEntity> getStudentApplicationForInternship(Long studentId, Long internshipId) {
+        return applicationRepository.findByStudentIdAndInternshipId(studentId, internshipId);
+    }
+
     public Long getTotalApplications(Long studentId) {
         return applicationRepository.countByStudentId(studentId);
     }

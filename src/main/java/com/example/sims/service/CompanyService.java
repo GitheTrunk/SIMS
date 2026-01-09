@@ -79,6 +79,8 @@ public class CompanyService {
         return applicationRepository.findById(applicationId);
     }
 
+ 
+
     @Transactional
     public ApplicationEntity updateApplicationStatus(Long applicationId, ApplicationEntity.ApplicationStatus status) {
         Optional<ApplicationEntity> appOpt = applicationRepository.findById(applicationId);

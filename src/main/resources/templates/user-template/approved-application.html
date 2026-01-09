@@ -129,7 +129,8 @@
 </nav>
 
 <div class="container">
-    <h1>My Applications</h1>
+    <h1>Approved Applications</h1>
+
     <div class="table-container">
         <table>
             <thead>
@@ -142,36 +143,33 @@
                 </tr>
             </thead>
             
-           <tbody>
-    <tr th:each="app : ${applications}">
-        <td>
-            <strong th:text="${app.internship.company.companyName}">Company</strong>
-        </td>
-        
-        <td th:text="${app.internship.title}">Position</td>
-        
-        <td th:text="${#temporals.format(app.appliedAt, 'MMM dd, yyyy')}">Date Applied</td>
-        
-        <td>
-            <span class="status"
-                  th:classappend="${app.status.name() == 'PENDING'} ? ' status-pending' :
-                                 (${app.status.name() == 'APPROVED'} ? ' status-approved' : ' status-rejected')"
-                  th:text="${app.status}">
-                Status
-            </span>
-        </td>
-        
-        <td>
-            <a th:href="@{/student/view-application/{id}(id=${app.id})}" style="color:var(--primary)">View Details</a>
-        </td>
-    </tr>
-</tbody>
+            <tbody>
+                <tr th:each="app : ${applications}">
+                    <td>
+                        <strong th:text="${app.internship.company.companyName}">Company</strong>
+                    </td>
+                    <td th:text="${app.internship.title}">Position</td>
+                    <td th:text="${#temporals.format(app.appliedAt, 'MMM dd, yyyy')}">Date Applied</td>
+                    <td>
+                        <span class="status status-approved" th:text="${app.status}">
+                            APPROVED
+                        </span>
+                    </td>
+                    <td>
+                        <a th:href="@{/student/view-application/{id}(id=${app.id})}" style="color:var(--primary); font-weight:bold;">View Details</a>
+                    </td>
+                </tr>
 
-
+                <tr th:if="${#lists.isEmpty(applications)}">
+                    <td colspan="5" style="text-align: center; padding: 40px; color: var(--gray-text);">
+                        <p>No approved applications yet. Keep applying!</p>
+                        <a href="/student/browse-internship" style="color: var(--primary);">Browse more internships</a>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </div>
-
 <script>
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('navLinks');

@@ -38,6 +38,9 @@ public class ApplicationEntity {
     @Column(name = "applied_at", nullable = false)
     private LocalDateTime appliedAt;
 
+    @Column(columnDefinition = "TEXT")
+    private String coverLetter;
+
     public ApplicationEntity() {
     }
 
@@ -90,6 +93,14 @@ public class ApplicationEntity {
 
     public void setAppliedAt(LocalDateTime appliedAt) {
         this.appliedAt = appliedAt;
+    }
+
+    public String getCoverLetter() {
+        return coverLetter;
+    }
+
+    public void setCoverLetter(String coverLetter) {
+        this.coverLetter = coverLetter;
     }
 
     public enum ApplicationStatus {

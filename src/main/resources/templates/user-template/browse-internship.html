@@ -136,22 +136,15 @@
     </div>
 
     <div class="grid">
-        <div class="job-card">
-            <div class="company-logo">G</div>
-            <div class="tag">Remote</div>
-            <h3>Software Engineer Intern</h3>
-            <p><strong>Google</strong> • Mountain View, CA</p>
-            <p class="gray-text">Work on large-scale distributed systems and develop high-performance code.</p>
-            <a href="#" class="btn">Apply Now</a>
-        </div>
-
-        <div class="job-card">
-            <div class="company-logo">M</div>
-            <div class="tag">Hybrid</div>
-            <h3>Product Design Intern</h3>
-            <p><strong>Microsoft</strong> • Redmond, WA</p>
-            <p class="gray-text">Join the UX team to craft beautiful interfaces for millions of users.</p>
-            <a href="#" class="btn">Apply Now</a>
+        <div th:each="internship : ${internships}" class="job-card">
+            <div th:if="${internship.location != null}" class="tag" th:text="${internship.location}">Remote</div>
+            <h3 th:text="${internship.title}">Internship Title</h3>
+            <p>
+                <strong th:text="${internship.company != null ? internship.company.companyName : 'Company'}">Company</strong>
+                • <span th:text="${internship.location}">Location</span>
+            </p>
+            <p class="gray-text" th:text="${#strings.abbreviate(internship.description, 140)}">Short description</p>
+            <a th:href="@{/student/apply/{id}(id=${internship.id})}" class="btn">Apply Now</a>
         </div>
     </div>
 </div>
