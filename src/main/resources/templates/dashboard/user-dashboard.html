@@ -492,7 +492,7 @@ td {
                             <span class="status" th:classappend="${app.status.name() == 'PENDING'} ? ' status-pending' : (${app.status.name() == 'APPROVED'} ? ' status-approved' : ' status-rejected')" th:text="${app.status}">Status</span>
                         </td>
                         <td>
-                            <a th:href="@{/student/user-application}" style="color:var(--primary)">View Details</a>
+                            <a th:href="@{/student/view-application/{id}(id=${app.id})}" style="color:var(--primary)">View Details</a>
                         </td>
                     </tr>
                 </tbody>
