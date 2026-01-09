@@ -6,6 +6,12 @@ build/
 !**/src/test/**/build/
 .env
 
+### User Uploads ###
+uploads/*
+!uploads/cv/
+uploads/cv/*
+!uploads/cv/.gitkeep
+
 
 ### STS ###
 .apt_generated

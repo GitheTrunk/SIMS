@@ -30,14 +30,14 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/auth/**", "/api/auth/**", "/css/**", "/js/**", "/images/**")
+                        .requestMatchers("/", "/auth/**", "/api/auth/**", "/css/**", "/js/**", "/images/**", "/uploads/**")
                         .permitAll()
 
                         // RBAC
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/student/**").hasRole("USER")
-                        .requestMatchers("/api/company/**").hasRole("COMPANY")
-
+                        .requestMatchers("/api/student/**", "/student/**").hasAnyRole("USER", "STUDENT")
+                        .requestMatchers("/api/company/**", "/company/**").hasRole("COMPANY")
+                        .requestMatchers("/dashboard").authenticated()
 
                         
                         .anyRequest().authenticated())
