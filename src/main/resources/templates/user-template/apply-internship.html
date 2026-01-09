@@ -139,85 +139,91 @@
         }
     </style>
 </head>
+
 <body>
-
-<nav>
-    <div class="nav-container">
-        <a href="/" class="logo">📚 SIMS</a>
-        <div class="nav-links">
-            <a href="/student/dashboard">Dashboard</a>
-            <a href="/student/browse-internship">Browse Internships</a>
-            <a href="/student/user-application">My Applications</a>
-            <a href="/student/user-profile">Profile</a>
+    <!-- nav -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">📚 SIMS</a>
+                <div class="nav-links">
+                    <a href="/student/dashboard">Dashboard</a>
+                    <a href="/student/browse-internship">Browse Internships</a>
+                    <a href="/student/user-application">My Applications</a>
+                    <a href="/student/user-profile">Profile</a>
+                </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<div class="container">
-    <div class="form-wrapper">
-        <!-- Internship Details -->
-        <div class="internship-header">
-            <h2 th:text="${internship.title}">Internship Title</h2>
+
+    <!-- company information -->
+    <div class="container">
+        <div class="form-wrapper">
+            <div class="internship-header">
+                <h2 th:text="${internship.title}">Internship Title</h2>
             <div class="internship-meta">
-                <span>
-                    <strong>Company:</strong>
-                    <span th:text="${internship.company.companyName}">Company Name</span>
-                </span>
-                <span>
-                    <strong>Location:</strong>
-                    <span th:text="${internship.location}">Location</span>
-                </span>
-                <span th:if="${internship.seats}">
-                    <strong>Available Seats:</strong>
-                    <span th:text="${internship.seats}">5</span>
-                </span>
-            </div>
+                    <span>
+                        <strong>Company:</strong>
+                        <span th:text="${internship.company.companyName}">Company Name</span>
+                    </span>
+                    <span>
+                        <strong>Location:</strong>
+                        <span th:text="${internship.location}">Location</span>
+                    </span>
+                        <span th:if="${internship.seats}">
+                        <strong>Available Seats:</strong>
+                        <span th:text="${internship.seats}">5</span>
+                    </span>
         </div>
-
-        <div class="info-box">
-            <strong>📋 Application Form</strong>
-            <p>Please review your CV on file and provide a cover letter explaining your interest in this position.</p>
-        </div>
-
-        <!-- Application Form -->
-        <form th:action="@{/student/apply/{id}(id=${internship.id})}" method="post">
-            
-            <!-- CV Information -->
-            <div class="form-group">
-                <label>📄 Your CV</label>
-                <div th:if="${student.cvFile}" style="padding: 12px; background: #f3f4f6; border-radius: 8px; margin-bottom: 12px;">
-                    <strong>Current CV:</strong> <span th:text="${student.cvFile}">cv_file.pdf</span>
-                    <p class="helper-text">Your uploaded CV will be submitted with your application</p>
-                </div>
-                <div th:if="!${student.cvFile}" style="padding: 12px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #ef4444; margin-bottom: 12px;">
-                    <strong style="color: #dc2626;">⚠️ No CV Uploaded</strong>
-                    <p class="helper-text">Please <a href="/student/user-profile" style="color: var(--primary);">upload a CV</a> before submitting your application.</p>
-                </div>
-            </div>
-
-            <!-- Cover Letter -->
-            <div class="form-group">
-                <label for="coverLetter">💬 Cover Letter / Motivation <span style="color: #ef4444;">*</span></label>
-                <textarea id="coverLetter" name="coverLetter" required placeholder="Tell us why you're interested in this internship, what skills you bring, and what you hope to learn..."></textarea>
-                <p class="helper-text">Minimum 50 characters. Share your enthusiasm and relevant experience for this role.</p>
-            </div>
-
-            <!-- Internship Details Summary -->
-            <div class="form-group" th:if="${internship.description}">
-                <label>📝 Position Description</label>
-                <div style="padding: 12px; background: #f3f4f6; border-radius: 8px; border-left: 4px solid var(--primary);">
-                    <p th:text="${internship.description}" style="margin: 0; white-space: pre-wrap;"></p>
-                </div>
-            </div>
-
-            <!-- Form Actions -->
-            <div class="form-actions">
-                <a href="/student/browse-internship" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-primary">Submit Application ✅</button>
-            </div>
-        </form>
     </div>
+
+            <div class="info-box">
+                <strong>Application Form</strong>
+                <p>Please review your CV on file and provide a cover letter explaining your interest in this position.</p>
+            </div>
+
+            <!-- Application Form -->
+            <form th:action="@{/student/apply/{id}(id=${internship.id})}" method="post">
+            
+                <!-- CV -->
+                <div class="form-group">
+                    <label>Your CV</label>
+                        <div th:if="${student.cvFile}" style="padding: 12px; background: #f3f4f6; border-radius: 8px; margin-bottom: 12px;">
+                            <strong>Current CV:</strong> <span th:text="${student.cvFile}">cv_file.pdf</span>
+                            <p class="helper-text">Your uploaded CV will be submitted with your application</p>
+                        </div>
+                        <div th:if="!${student.cvFile}" style="padding: 12px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #ef4444; margin-bottom: 12px;">
+                            <strong style="color: #dc2626;">No CV Uploaded</strong>
+                            <p class="helper-text">Please <a href="/student/user-profile" style="color: var(--primary);">upload a CV</a> before submitting your application.</p>
+                        </div>
+                </div>
+
+                <!-- Cover Letter -->
+                <div class="form-group">
+                    <label for="coverLetter">Your Cover Letter <span style="color: #ef4444;">*</span></label>
+                    <textarea id="coverLetter" name="coverLetter" required placeholder="Tell us why you're interested in this internship, what skills you bring, and what you hope to learn..."></textarea>
+                    <p class="helper-text">Minimum 50 characters. Share your enthusiasm and relevant experience for this role.</p>
+                </div>
+
+                <!-- Internship Details -->
+                <div class="form-group" th:if="${internship.description}">
+                    <label>Position Description</label>
+                        <div style="padding: 12px; background: #f3f4f6; border-radius: 8px; border-left: 4px solid var(--primary);">
+                            <p th:text="${internship.description}" style="margin: 0; white-space: pre-wrap;"></p>
+                        </div>
+                </div>
+
+          
+                <div class="form-actions">
+                    <a href="/student/browse-internship" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Submit Application</button>
+                </div>
+
+            </form>
+    </div>
+
 </div>
 
 </body>
+
+
 </html>
