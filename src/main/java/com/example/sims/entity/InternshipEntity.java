@@ -131,4 +131,24 @@ public class InternshipEntity {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    // Convenience accessor for company name
+    public String getCompanyName() {
+        return company != null ? company.getCompanyName() : null;
+    }
+
+    // Determine status based on end date
+    public String getStatus() {
+        if (endDate == null)
+            return "ACTIVE";
+        if (endDate.isBefore(java.time.LocalDate.now()))
+            return "CLOSED";
+        return "ACTIVE";
+    }
+
+    // Closing date accessor (alias for endDate)
+    public java.time.LocalDate getClosingDate() {
+        return endDate;
+    }
+
 }

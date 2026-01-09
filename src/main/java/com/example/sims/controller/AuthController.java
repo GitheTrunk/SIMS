@@ -43,6 +43,12 @@ public class AuthController {
             cookie.setPath("/");
             response.addCookie(cookie);
 
+            // mark user active
+            try {
+                authService.markUserActiveByEmail(email, true);
+            } catch (Exception ex) {
+                /* ignore */ }
+
             return "redirect:/dashboard";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
@@ -69,11 +75,18 @@ public class AuthController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletResponse response) {
+    public String logout(HttpServletResponse response, jakarta.servlet.http.HttpServletRequest request) {
         Cookie cookie = new Cookie("jwt", null);
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
+        // attempt to mark user inactive if userEmail attribute is available
+        try {
+            String userEmail = (String) request.getAttribute("userEmail");
+            if (userEmail != null)
+                authService.markUserActiveByEmail(userEmail, false);
+        } catch (Exception ex) {
+            /* ignore */ }
         return "redirect:/auth/login";
     }
 
@@ -88,6 +101,10 @@ public class AuthController {
             try {
                 String token = authService.login(email, password);
                 UserEntity user = authService.getUserByEmail(email);
+                try {
+                    authService.markUserActiveByEmail(email, true);
+                } catch (Exception ex) {
+                    /* ignore */ }
                 return ResponseEntity.ok(new AuthResponse(token, user.getUsername(), user.getRole()));
             } catch (Exception e) {
                 return ResponseEntity.status(401)
@@ -103,11 +120,24 @@ public class AuthController {
                 UserEntity user = authService.register(email, username, password,
                         role != null ? role : "USER");
                 String token = authService.login(email, password);
+                try {
+                    authService.markUserActiveByEmail(email, true);
+                } catch (Exception ex) {
+                    /* ignore */ }
                 return ResponseEntity.ok(new AuthResponse(token, user.getUsername(), user.getRole()));
             } catch (Exception e) {
                 return ResponseEntity.status(400)
                         .body(new AuthResponse(null, null, null, e.getMessage()));
             }
+        }
+
+        @PostMapping("/logout")
+        public ResponseEntity<Void> apiLogout(@RequestParam String email) {
+            try {
+                authService.markUserActiveByEmail(email, false);
+            } catch (Exception ex) {
+                /* ignore */ }
+            return ResponseEntity.ok().build();
         }
     }
 }

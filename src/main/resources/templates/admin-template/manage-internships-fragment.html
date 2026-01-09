@@ -1,0 +1,105 @@
+<!-- Manage Internships fragment (injected into dashboard main container) -->
+<style>
+  :root{--bg-dark:#071226;--panel:#0b1220;--muted:#9fb0c8;--accent:#2563eb;--accent2:#7c3aed;--card:#071226;--card-2:#0b1520;--glass:rgba(255,255,255,0.02)}
+  .mi-wrap{width:100%;max-width:1200px;margin:8px auto;padding:6px 12px;color:#e6eef9}
+  .mi-panel{background:linear-gradient(180deg,var(--glass),transparent);padding:20px;border-radius:12px;box-shadow:0 12px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+  .mi-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:12px;flex-wrap:wrap}
+  .mi-header h2{margin:0;font-size:1.9rem;color:#e6eef9}
+  .mi-sub{color:var(--muted);margin-top:6px}
+  .mi-actions-row{display:flex;gap:12px;align-items:center}
+  .mi-search{width:360px;max-width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:rgba(255,255,255,0.02);color:#e6eef9}
+  .mi-btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;border:none;cursor:pointer}
+
+  .mi-table-wrap{margin-top:18px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border-radius:12px;padding:8px}
+  .mi-table{width:100%;border-collapse:collapse;background:transparent;border-radius:10px;overflow:hidden}
+  .mi-table thead th{padding:14px;background:transparent;color:var(--muted);text-align:left;border-bottom:1px solid rgba(255,255,255,0.03)}
+  .mi-table td{padding:14px;border-top:1px solid rgba(255,255,255,0.02);color:#cfe8ff}
+  .mi-table tbody tr:hover{background:linear-gradient(90deg, rgba(255,255,255,0.01), transparent)}
+
+  .badge-active{background:linear-gradient(90deg,#052a1d,#06302a);color:#9fe9c9;padding:6px 10px;border-radius:999px;font-weight:700}
+  .mi-actions .btn{padding:8px 12px;border-radius:8px;border:none;margin-left:8px;font-weight:700}
+  .btn-edit{background:linear-gradient(90deg,var(--accent),#38bdf8);color:#071226}
+  .btn-close{background:linear-gradient(90deg,#ef4444,#fb7185);color:#fff}
+
+  @media (max-width: 880px){
+    .mi-header{flex-direction:column;align-items:flex-start}
+    .mi-actions-row{width:100%;justify-content:space-between}
+    .mi-search{width:100%}
+    .mi-table thead{display:none}
+    .mi-table tbody td{display:block;padding:12px}
+    .mi-table tbody tr{margin-bottom:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);}
+  }
+</style>
+
+<div class="mi-wrap">
+  <div class="mi-panel">
+    <div class="mi-header">
+      <div>
+        <h2>Manage Internships</h2>
+        <div class="mi-sub">Create and manage internship positions</div>
+      </div>
+      <div class="mi-actions-row">
+        <input class="mi-search" placeholder="Search internships..." />
+        <button class="mi-btn">+ Post New Position</button>
+      </div>
+    </div>
+
+    <div class="mi-table-wrap">
+      <table class="mi-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Company/Dept</th>
+            <th>Apps</th>
+            <th>Status</th>
+            <th>Closing Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="miTableBody">
+          <!-- populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // optional small init for interactive controls in fragment
+  window.initManageInternshipsFragment = function(){
+    const search = document.querySelector('.mi-search');
+    const tbody = document.getElementById('miTableBody');
+    async function load(){
+      try{
+        const res = await fetch('/admin/api/internships');
+        if(!res.ok) throw new Error('failed');
+        const items = await res.json();
+        render(items);
+      }catch(e){ console.error('Failed to load internships', e); }
+    }
+    function render(items){
+      if(!tbody) return;
+      const q = search && search.value ? search.value.toLowerCase() : '';
+      tbody.innerHTML = '';
+      items.filter(it => {
+        if(!q) return true;
+        return (it.title && it.title.toLowerCase().includes(q)) || (it.company && it.company.toLowerCase().includes(q));
+      }).forEach(it => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight:700">${escapeHtml(it.title || '')}</td>
+          <td>${escapeHtml(it.company || '')}</td>
+          <td>${it.applications || 0}</td>
+          <td><span class="badge-active">${escapeHtml(it.status || 'ACTIVE')}</span></td>
+          <td>${escapeHtml(it.closingDate || '')}</td>
+          <td class="mi-actions"><button class="btn btn-edit">Edit</button><button class="btn btn-close">Close</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    function escapeHtml(s){ return (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    if(search){ search.addEventListener('input', ()=> load()); }
+    load();
+    setInterval(load, 15000);
+  }
+</script>
