@@ -122,8 +122,16 @@ public class StudentController {
 
     // for editing profile
     @PostMapping("/edit-profile")
+<<<<<<< HEAD
+    public String editProfile(HttpServletRequest request,
+            @RequestParam String fullname,
+            @RequestParam String major,
+            @RequestParam Integer year,
+            RedirectAttributes redirectAttributes) {
+=======
     public String editProfile(HttpServletRequest request, @RequestParam String fullname, @RequestParam String major,
             @RequestParam Integer year, RedirectAttributes redirectAttributes) {
+>>>>>>> 62fac6a10f7af1b0ec0baa115a73fc17a99825fe
         StudentProfileEntity student = getAuthenticatedStudent(request);
         if (student == null) {
             return "redirect:/auth/login";
@@ -152,7 +160,35 @@ public class StudentController {
         return "user-template/browse-internship";
     }
 
+<<<<<<< HEAD
+    @GetMapping("/api/internships")
+    public org.springframework.http.ResponseEntity<java.util.List<java.util.Map<String, Object>>> studentInternships(
+            HttpServletRequest request) {
+        // require authenticated student
+        StudentProfileEntity s = getAuthenticatedStudent(request);
+        if (s == null)
+            return org.springframework.http.ResponseEntity.status(401).build();
+        java.util.List<com.example.sims.entity.InternshipEntity> list = studentService.getAllInternships();
+        java.util.List<java.util.Map<String, Object>> out = new java.util.ArrayList<>();
+        for (var i : list) {
+            java.util.Map<String, Object> m = new java.util.HashMap<>();
+            m.put("id", i.getId());
+            m.put("title", i.getTitle());
+            m.put("description", i.getDescription());
+            m.put("location", i.getLocation());
+            m.put("seats", i.getSeats());
+            m.put("startDate", i.getStartDate());
+            m.put("endDate", i.getEndDate());
+            m.put("createdAt", i.getCreatedAt());
+            m.put("company", i.getCompanyName());
+            out.add(m);
+        }
+        return org.springframework.http.ResponseEntity.ok(out);
+    }
+
+=======
     // user application
+>>>>>>> 62fac6a10f7af1b0ec0baa115a73fc17a99825fe
     @GetMapping("/user-application")
     public String userApplication(HttpServletRequest request, Model model) {
         StudentProfileEntity student = getAuthenticatedStudent(request);
@@ -297,7 +333,12 @@ public class StudentController {
 
     // for uploading cv
     @PostMapping("/upload-cv")
+<<<<<<< HEAD
+    public String uploadCv(HttpServletRequest request,
+            @RequestParam("cvFile") MultipartFile file,
+=======
     public String uploadCv(HttpServletRequest request, @RequestParam("cvFile") MultipartFile file,
+>>>>>>> 62fac6a10f7af1b0ec0baa115a73fc17a99825fe
             RedirectAttributes redirectAttributes) {
         StudentProfileEntity student = getAuthenticatedStudent(request);
         if (student == null) {

@@ -75,6 +75,18 @@ public class AuthService {
         return userRepository.findByEmail(email).orElse(null);
     }
 
+    @Transactional
+    public void markUserActiveByEmail(String email, boolean active) {
+        userRepository.findByEmail(email).ifPresent(u -> {
+            u.setActive(active);
+            userRepository.save(u);
+            try {
+                com.example.sims.realtime.ActiveUserNotifier.notifyChange();
+            } catch (Exception ex) {
+                /* ignore notifier failures */ }
+        });
+    }
+
     public UserEntity updateUser(Long id, String username, String email) {
         UserEntity user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(
                 "User not found"));
