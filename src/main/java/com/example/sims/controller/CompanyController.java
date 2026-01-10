@@ -250,7 +250,7 @@ public class CompanyController {
 
     @GetMapping("/applications/{id}")
     public String viewApplication(@PathVariable Long id, HttpServletRequest request, Model model) {
-        CompanyEntity company = getAuthenticatedCompany(request);
+        // CompanyEntity company = getAuthenticatedCompany(request);
 
         // Use the repository directly or a service
         Optional<ApplicationEntity> appOpt = applicationRepository.findById(id);

@@ -122,16 +122,11 @@ public class StudentController {
 
     // for editing profile
     @PostMapping("/edit-profile")
-<<<<<<< HEAD
     public String editProfile(HttpServletRequest request,
             @RequestParam String fullname,
             @RequestParam String major,
             @RequestParam Integer year,
             RedirectAttributes redirectAttributes) {
-=======
-    public String editProfile(HttpServletRequest request, @RequestParam String fullname, @RequestParam String major,
-            @RequestParam Integer year, RedirectAttributes redirectAttributes) {
->>>>>>> 62fac6a10f7af1b0ec0baa115a73fc17a99825fe
         StudentProfileEntity student = getAuthenticatedStudent(request);
         if (student == null) {
             return "redirect:/auth/login";
@@ -160,7 +155,6 @@ public class StudentController {
         return "user-template/browse-internship";
     }
 
-<<<<<<< HEAD
     @GetMapping("/api/internships")
     public org.springframework.http.ResponseEntity<java.util.List<java.util.Map<String, Object>>> studentInternships(
             HttpServletRequest request) {
@@ -186,9 +180,6 @@ public class StudentController {
         return org.springframework.http.ResponseEntity.ok(out);
     }
 
-=======
-    // user application
->>>>>>> 62fac6a10f7af1b0ec0baa115a73fc17a99825fe
     @GetMapping("/user-application")
     public String userApplication(HttpServletRequest request, Model model) {
         StudentProfileEntity student = getAuthenticatedStudent(request);
@@ -333,12 +324,9 @@ public class StudentController {
 
     // for uploading cv
     @PostMapping("/upload-cv")
-<<<<<<< HEAD
     public String uploadCv(HttpServletRequest request,
             @RequestParam("cvFile") MultipartFile file,
-=======
-    public String uploadCv(HttpServletRequest request, @RequestParam("cvFile") MultipartFile file,
->>>>>>> 62fac6a10f7af1b0ec0baa115a73fc17a99825fe
+
             RedirectAttributes redirectAttributes) {
         StudentProfileEntity student = getAuthenticatedStudent(request);
         if (student == null) {
