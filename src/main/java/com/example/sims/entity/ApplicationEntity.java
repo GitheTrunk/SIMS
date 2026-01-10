@@ -36,7 +36,7 @@ public class ApplicationEntity {
     private ApplicationStatus status = ApplicationStatus.PENDING;
 
     @Column(name = "applied_at", nullable = false)
-    private LocalDateTime appliedAt;
+    public LocalDateTime appliedAt;
 
     @Column(columnDefinition = "TEXT")
     private String coverLetter;
@@ -53,6 +53,7 @@ public class ApplicationEntity {
     protected void onCreate() {
         appliedAt = LocalDateTime.now();
     }
+
 
     // Getters and Setters
     public Long getId() {
@@ -88,7 +89,7 @@ public class ApplicationEntity {
     }
 
     public LocalDateTime getAppliedAt() {
-        return appliedAt;
+        return this.appliedAt;
     }
 
     public void setAppliedAt(LocalDateTime appliedAt) {

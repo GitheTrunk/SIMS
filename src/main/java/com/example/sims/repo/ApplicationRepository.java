@@ -32,5 +32,13 @@ public interface ApplicationRepository extends JpaRepository<ApplicationEntity, 
     Long countPendingByStudentId(@Param("studentId") Long studentId);
 
     @Query("SELECT a FROM ApplicationEntity a WHERE a.student.id = :studentId AND a.internship.id = :internshipId")
-    Optional<ApplicationEntity> findByStudentIdAndInternshipId(@Param("studentId") Long studentId, @Param("internshipId") Long internshipId);
+    Optional<ApplicationEntity> findByStudentIdAndInternshipId(@Param("studentId") Long studentId,
+            @Param("internshipId") Long internshipId);
+    
+
+    @Query("SELECT a FROM ApplicationEntity a " +
+       "JOIN FETCH a.student " +
+       "JOIN FETCH a.internship " +
+       "WHERE a.id = :id")
+    Optional<ApplicationEntity> findFullApplicationById(@Param("id") Long id);
 }

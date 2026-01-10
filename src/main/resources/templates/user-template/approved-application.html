@@ -108,68 +108,67 @@
     </style>
 </head>
 <body>
-<nav>
-    <div class="nav-container">
-        <a href="/" class="logo">📚 SIMS</a>
 
-        <button class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+    <!-- nav -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">📚 SIMS</a>
 
-        <div class="nav-links" id="navLinks">
-            <a href="/student/dashboard">Dashboard</a>
-            <a href="/student/browse-internship">Browse Internships</a>
-            <a class="MA">My Applications</a>
-            <a href="/student/user-profile">Profile</a>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-links" id="navLinks">
+                <a href="/student/dashboard">Dashboard</a>
+                <a href="/student/browse-internship">Browse Internships</a>
+                <a class="MA">My Applications</a>
+                <a href="/student/user-profile">Profile</a>
+            </div>
+
         </div>
+    </nav>
 
-    </div>
-</nav>
-
-<div class="container">
-    <h1>Approved Applications</h1>
-
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Company</th>
-                    <th>Position</th>
-                    <th>Date Applied</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+    <!-- body -->
+    <div class="container">
+        <h1>Approved Applications</h1>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Position</th>
+                            <th>Date Applied</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
             
-            <tbody>
-                <tr th:each="app : ${applications}">
-                    <td>
-                        <strong th:text="${app.internship.company.companyName}">Company</strong>
-                    </td>
-                    <td th:text="${app.internship.title}">Position</td>
-                    <td th:text="${#temporals.format(app.appliedAt, 'MMM dd, yyyy')}">Date Applied</td>
-                    <td>
-                        <span class="status status-approved" th:text="${app.status}">
-                            APPROVED
-                        </span>
-                    </td>
-                    <td>
-                        <a th:href="@{/student/view-application/{id}(id=${app.id})}" style="color:var(--primary); font-weight:bold;">View Details</a>
-                    </td>
-                </tr>
+                    <tbody>
+                        <tr th:each="app : ${applications}">
+                            <td><strong th:text="${app.internship.company.companyName}">Company</strong></td>
+                            <td th:text="${app.internship.title}">Position</td>
+                            <td th:text="${#temporals.format(app.appliedAt, 'MMM dd, yyyy')}">Date Applied</td>
+                            <td><span class="status status-approved" th:text="${app.status}">APPROVED</span></td>
+                            <td>
+                                a th:href="@{/student/view-application/{id}(id=${app.id})}" style="color:var(--primary); font-weight:bold;">View Details</a>
+                            </td>
+                        </tr>
 
-                <tr th:if="${#lists.isEmpty(applications)}">
-                    <td colspan="5" style="text-align: center; padding: 40px; color: var(--gray-text);">
-                        <p>No approved applications yet. Keep applying!</p>
-                        <a href="/student/browse-internship" style="color: var(--primary);">Browse more internships</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        <tr th:if="${#lists.isEmpty(applications)}">
+                            <td colspan="5" style="text-align: center; padding: 40px; color: var(--gray-text);">
+                                <p>No approved applications yet. Keep applying!</p>
+                                <a href="/student/browse-internship" style="color: var(--primary);">Browse more internships</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
     </div>
-</div>
+
+
+    
 <script>
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('navLinks');

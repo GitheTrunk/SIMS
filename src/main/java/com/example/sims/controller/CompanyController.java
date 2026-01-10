@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import com.example.sims.entity.ApplicationEntity;
 import com.example.sims.entity.CompanyEntity;
 import com.example.sims.entity.InternshipEntity;
 import com.example.sims.entity.UserEntity;
+import com.example.sims.repo.ApplicationRepository;
 import com.example.sims.service.AuthService;
 import com.example.sims.service.CompanyService;
 
@@ -28,6 +30,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class CompanyController {
     private final CompanyService companyService;
     private final AuthService authService;
+
+    @Autowired
+    private ApplicationRepository applicationRepository;
 
     public CompanyController(CompanyService companyService, AuthService authService) {
         this.companyService = companyService;
@@ -84,11 +89,11 @@ public class CompanyController {
 
     @PostMapping("/profile/update")
     public String updateProfile(HttpServletRequest request,
-                                @RequestParam String companyName,
-                                @RequestParam String address,
-                                @RequestParam String contactEmail,
-                                @RequestParam String contactPhone,
-                                RedirectAttributes redirectAttributes) {
+            @RequestParam String companyName,
+            @RequestParam String address,
+            @RequestParam String contactEmail,
+            @RequestParam String contactPhone,
+            RedirectAttributes redirectAttributes) {
         CompanyEntity company = getAuthenticatedCompany(request);
         if (company == null) {
             return "redirect:/auth/login";
@@ -133,13 +138,13 @@ public class CompanyController {
 
     @PostMapping("/internships/create")
     public String createInternship(HttpServletRequest request,
-                                   @RequestParam String title,
-                                   @RequestParam String description,
-                                   @RequestParam String location,
-                                   @RequestParam Integer seats,
-                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-                                   RedirectAttributes redirectAttributes) {
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam String location,
+            @RequestParam Integer seats,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            RedirectAttributes redirectAttributes) {
         CompanyEntity company = getAuthenticatedCompany(request);
         if (company == null) {
             return "redirect:/auth/login";
@@ -179,14 +184,14 @@ public class CompanyController {
 
     @PostMapping("/internships/{id}/update")
     public String updateInternship(HttpServletRequest request,
-                                   @PathVariable Long id,
-                                   @RequestParam String title,
-                                   @RequestParam String description,
-                                   @RequestParam String location,
-                                   @RequestParam Integer seats,
-                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-                                   RedirectAttributes redirectAttributes) {
+            @PathVariable Long id,
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam String location,
+            @RequestParam Integer seats,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            RedirectAttributes redirectAttributes) {
         CompanyEntity company = getAuthenticatedCompany(request);
         if (company == null) {
             return "redirect:/auth/login";
@@ -211,7 +216,8 @@ public class CompanyController {
     }
 
     @PostMapping("/internships/{id}/delete")
-    public String deleteInternship(HttpServletRequest request, @PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String deleteInternship(HttpServletRequest request, @PathVariable Long id,
+            RedirectAttributes redirectAttributes) {
         CompanyEntity company = getAuthenticatedCompany(request);
         if (company == null) {
             return "redirect:/auth/login";
@@ -243,40 +249,43 @@ public class CompanyController {
     }
 
     @GetMapping("/applications/{id}")
-    public String viewApplication(HttpServletRequest request, @PathVariable Long id, Model model) {
+    public String viewApplication(@PathVariable Long id, HttpServletRequest request, Model model) {
         CompanyEntity company = getAuthenticatedCompany(request);
-        if (company == null) {
-            return "redirect:/auth/login";
+
+        // Use the repository directly or a service
+        Optional<ApplicationEntity> appOpt = applicationRepository.findById(id);
+
+        if (appOpt.isPresent()) {
+            ApplicationEntity application = appOpt.get();
+
+            // --- THE FIX ---
+            // Explicitly call the getter. This forces Hibernate to fetch the TEXT data
+            // from the DB before the connection closes.
+            String coverLetter = application.getCoverLetter();
+
+            // model.addAttribute("applied_at", application.getAppliedAt());
+            model.addAttribute("application", application);
+            model.addAttribute("student", application.getStudent());
+            model.addAttribute("internship", application.getInternship());
+            model.addAttribute("appliedAt", application.getAppliedAt());
+            model.addAttribute("myCoverLetter", coverLetter); // Pass it as a separate string to be safe
+
+            return "company-template/application-detail";
         }
-
-        Optional<ApplicationEntity> applicationOpt = companyService.getApplicationById(id);
-        if (applicationOpt.isEmpty()) {
-            return "redirect:/company/applications";
-        }
-
-        ApplicationEntity application = applicationOpt.get();
-        // Verify the application belongs to this company's internship
-        if (!application.getInternship().getCompany().getId().equals(company.getId())) {
-            return "redirect:/company/applications";
-        }
-
-        model.addAttribute("company", company);
-        model.addAttribute("username", company.getCompanyName());
-        model.addAttribute("application", application);
-
-        return "company-template/application-detail";
+        return "redirect:/company/applications";
     }
 
     @PostMapping("/applications/{id}/approve")
-    public String approveApplication(HttpServletRequest request, @PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String approveApplication(HttpServletRequest request, @PathVariable Long id,
+            RedirectAttributes redirectAttributes) {
         CompanyEntity company = getAuthenticatedCompany(request);
         if (company == null) {
             return "redirect:/auth/login";
         }
 
         Optional<ApplicationEntity> applicationOpt = companyService.getApplicationById(id);
-        if (applicationOpt.isEmpty() || 
-            !applicationOpt.get().getInternship().getCompany().getId().equals(company.getId())) {
+        if (applicationOpt.isEmpty() ||
+                !applicationOpt.get().getInternship().getCompany().getId().equals(company.getId())) {
             return "redirect:/company/applications";
         }
 
@@ -286,15 +295,16 @@ public class CompanyController {
     }
 
     @PostMapping("/applications/{id}/reject")
-    public String rejectApplication(HttpServletRequest request, @PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String rejectApplication(HttpServletRequest request, @PathVariable Long id,
+            RedirectAttributes redirectAttributes) {
         CompanyEntity company = getAuthenticatedCompany(request);
         if (company == null) {
             return "redirect:/auth/login";
         }
 
         Optional<ApplicationEntity> applicationOpt = companyService.getApplicationById(id);
-        if (applicationOpt.isEmpty() || 
-            !applicationOpt.get().getInternship().getCompany().getId().equals(company.getId())) {
+        if (applicationOpt.isEmpty() ||
+                !applicationOpt.get().getInternship().getCompany().getId().equals(company.getId())) {
             return "redirect:/company/applications";
         }
 
@@ -302,4 +312,5 @@ public class CompanyController {
         redirectAttributes.addFlashAttribute("success", "Application rejected!");
         return "redirect:/company/applications";
     }
+
 }

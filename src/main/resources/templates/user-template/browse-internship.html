@@ -106,48 +106,49 @@
 </head>
 <body>
 
+<!-- nav -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">📚 SIMS</a>
 
-<nav>
-    <div class="nav-container">
-        <a href="/" class="logo">📚 SIMS</a>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-        <button class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-
-        <div class="nav-links" id="navLinks">
-            <a href="/student/dashboard">Dashboard</a>
-            <a class="BI">Browse Internships</a>
-            <a href="/student/user-application">My Applications</a>
-            <a href="/student/user-profile">Profile</a>
+            <div class="nav-links" id="navLinks">
+                <a href="/student/dashboard">Dashboard</a>
+                <a class="BI">Browse Internships</a>
+                <a href="/student/user-application">My Applications</a>
+                <a href="/student/user-profile">Profile</a>
+            </div>
         </div>
+    </nav>
 
+
+    <!-- body -->
+    <div class="container">
+        <h1>Available Internships</h1>
+            <div class="search-section">
+                <input type="text" placeholder="Search by role, company, or keywords...">
+                <button class="btn" style="margin-top:0">Search</button>
+            </div>
+
+            <div class="grid">
+                <div th:each="internship : ${internships}" class="job-card">
+                    <div th:if="${internship.location != null}" class="tag" th:text="${internship.location}">Remote</div>
+                    <h3 th:text="${internship.title}">Internship Title</h3>
+                    <p>
+                        <strong th:text="${internship.company != null ? internship.company.companyName : 'Company'}">Company</strong> • <span th:text="${internship.location}">Location</span>
+                    </p>
+                    <p class="gray-text" th:text="${#strings.abbreviate(internship.description, 140)}">Short description</p>
+                    <a th:href="@{/student/apply/{id}(id=${internship.id})}" class="btn">Apply Now</a>
+                </div>
+            </div>
     </div>
-</nav>
 
-
-<div class="container">
-    <h1>Available Internships</h1>
-    <div class="search-section">
-        <input type="text" placeholder="Search by role, company, or keywords...">
-        <button class="btn" style="margin-top:0">Search</button>
-    </div>
-
-    <div class="grid">
-        <div th:each="internship : ${internships}" class="job-card">
-            <div th:if="${internship.location != null}" class="tag" th:text="${internship.location}">Remote</div>
-            <h3 th:text="${internship.title}">Internship Title</h3>
-            <p>
-                <strong th:text="${internship.company != null ? internship.company.companyName : 'Company'}">Company</strong>
-                • <span th:text="${internship.location}">Location</span>
-            </p>
-            <p class="gray-text" th:text="${#strings.abbreviate(internship.description, 140)}">Short description</p>
-            <a th:href="@{/student/apply/{id}(id=${internship.id})}" class="btn">Apply Now</a>
-        </div>
-    </div>
-</div>
+    
 <script>
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('navLinks');

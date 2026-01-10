@@ -94,37 +94,43 @@
 </head>
 <body>
 
-<nav>
-    <div class="nav-container">
-        <a href="/" class="logo">📚 SIMS</a>
+    <!-- nav -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">📚 SIMS</a>
 
-        <button class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-        <div class="nav-links" id="navLinks">
-            <a href="/student/dashboard">Dashboard</a>
-            <a href="/student/browse-internship">Browse Internships</a>
-            <a href="/student/user-application">My Applications</a>
-            <a class="pf">Profile</a>
-        </div>
-
-    </div>
-</nav>
-
-<div class="container">
-    <div class="profile-card">
-        <div class="profile-header">
-            <div class="avatar">👤</div>
-            <p style="color:#6b7280" th:text="${student.fullName}">Student Name</p>
-        </div>
-        <div class="profile-body">
-            <!-- Success Message -->
-            <div th:if="${success}" style="background: #d1fae5; color: #065f46; padding: 12px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #10b981;">
-                <strong>✓</strong> <span th:text="${success}"></span>
+            <div class="nav-links" id="navLinks">
+                <a href="/student/dashboard">Dashboard</a>
+                <a href="/student/browse-internship">Browse Internships</a>
+                <a href="/student/user-application">My Applications</a>
+                <a class="pf">Profile</a>
             </div>
+
+        </div>
+    </nav>
+
+    <!-- body -->
+    <div class="container">
+        <!-- pf card -->
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="avatar">👤</div>
+                <p style="color:#6b7280" th:text="${student.fullName}">Student Name</p>
+            </div>
+
+            <!-- pf info -->
+            <div class="profile-body">
+            
+                <div th:if="${success}" style="background: #d1fae5; color: #065f46; padding: 12px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #10b981;">
+                    <strong>✓</strong> <span th:text="${success}"></span>
+                </div>
+
 
             <form method="post" action="/student/edit-profile">
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
@@ -137,6 +143,7 @@
                         <input type="email" th:value="${email}" readonly style="background-color: #f3f4f6; cursor: not-allowed;">
                     </div>
                 </div>
+
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div class="form-group">
                         <label>Major</label>
@@ -147,6 +154,7 @@
                         <input type="text" th:value="${studentCode}" readonly style="background-color: #f3f4f6; cursor: not-allowed;">
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label>Year</label>
                     <input type="number" name="year" th:value="${year}" min="1" max="10" required>
@@ -158,40 +166,38 @@
                 </div>
             </form>
 
-            <!-- CV Upload Section -->
             <div class="cv-section">
-                <h3>📄 Curriculum Vitae (CV)</h3>
+                <h3>Your Curriculum Vitae (CV)</h3>
 
-                <!-- Current CV Display -->
-                <div th:if="${cvFile}">
-                    <p style="margin: 0 0 12px 0; color: #374151;"><strong>Current CV:</strong></p>
-                    <div class="cv-file-display" style="display: flex; gap: 12px; align-items: center; margin-bottom: 24px;">
-                        <span th:text="${cvFile}" style="flex: 1;"></span>
-                            <form method="get" action="/student/view-cv" target="_blank" style="margin:0">
-                                <button type="submit" class="btn-save" style="margin:0;">
-                                    <span class="btn-text">View CV</span>
-                                </button>
-                            </form>
+                    <div th:if="${cvFile}">
+                        <p style="margin: 0 0 12px 0; color: #374151;"><strong>Current CV:</strong></p>
+                    <div class="cv-file-display">
+
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 1.2rem;">📄</span>
+                        <span th:text="${cvFile.contains('_') ? cvFile.substring(cvFile.lastIndexOf('_') + 1) : cvFile}" style="font-weight: 500;">filename.pdf</span>
                     </div>
-                </div>
+            
+                        <a th:href="@{/files/cv/{f}(f=${cvFile})}" target="_blank" class="btn-save" style="text-decoration: none; font-size: 0.85rem; padding: 10px 20px; color: white; display: inline-flex; align-items: center;">View CV</a>
+                    </div>
 
-                <!-- Single Upload Form (works for new and replacement). Use a visible button that triggers hidden file input and auto-submits. -->
+            </div>
+
+        </div>
+
+            <!-- upload CV + view CV -->
                 <form id="cvUploadForm" method="post" action="/student/upload-cv" enctype="multipart/form-data" style="display:flex; gap:12px; align-items:center;">
                     <input type="file" id="cvUploadInput" name="cvFile" accept=".pdf,.doc,.docx" style="display:none;" />
-                    <label for="cvUploadInput" class="btn-save" style="margin:0; cursor:pointer;">
-                        <span th:if="${cvFile}">Upload New CV</span>
-                        <span th:if="!${cvFile}">Upload CV</span>
+                    <label for="cvUploadInput" class="btn-save" style="margin:0; cursor:pointer; background: var(--secondary);">
+                        <span th:text="${cvFile != null ? 'Replace CV' : 'Upload CV'}">Upload CV</span>
                     </label>
-                    <div style="flex:1; font-size:0.95rem; color:#374151;">
-                        <div class="file-info" style="margin-top:6px;">
-                            ✓ Supported formats: PDF, DOC, DOCX — Max 5MB
-                        </div>
+                    <div style="flex:1;">
+                        <div class="file-info" style="margin:0;">✓ PDF, DOC, DOCX (Max 5MB)</div>
                     </div>
                 </form>
-            </div>
-        </div>
     </div>
-</div>
+
+
 <script>
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('navLinks');
