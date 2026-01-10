@@ -230,83 +230,48 @@
             </tr>
           </thead>
           <tbody>
-            <tr th:each="application : ${applications}">
-              <td>
-                <div
-                  class="student-name"
-                  th:text="${application.student.fullName}"
-                >
-                  John Doe
-                </div>
-                <div style="font-size: 0.875rem; color: var(--text-gray)">
-                  <span th:text="${application.student.studentCode}"
-                    >STU001</span
-                  >
-                  •
-                  <span th:text="${application.student.major}"
-                    >Computer Science</span
-                  >
-                </div>
-              </td>
-              <td>
-                <div
-                  class="student-name"
-                  th:text="${application.internship.title}"
-                >
-                  Software Engineer Intern
-                </div>
-                <div
-                  class="internship-title"
-                  th:text="${application.internship.location}"
-                >
-                  Remote
-                </div>
-              </td>
-              <td
-                th:text="${#temporals.format(application.appliedAt, 'MMM dd, yyyy HH:mm')}"
-              >
-                Jan 05, 2026 10:30
-              </td>
-              <td>
-                <span
-                  class="badge"
-                  th:classappend="${application.status.name() == 'PENDING'} ? 'badge-pending' : (${application.status.name() == 'APPROVED'} ? 'badge-approved' : 'badge-rejected')"
-                  th:text="${application.status.name()}"
-                  >PENDING</span
-                >
-              </td>
-              <td>
-                <a
-                  th:href="@{/company/applications/{id}(id=${application.id})}"
-                  class="btn btn-primary"
-                  >👁️ View</a
-                >
 
-                <form
-                  th:if="${application.status.name() == 'PENDING'}"
-                  th:action="@{/company/applications/{id}/approve(id=${application.id})}"
-                  method="post"
-                  class="action-form"
-                  onsubmit="return confirm('Are you sure you want to approve this application?');"
-                >
-                  <button type="submit" class="btn btn-success">
-                    ✅ Approve
-                  </button>
+           <tbody>
+    <tr th:each="app : ${applications}">
+        <td>
+            <div class="student-name" th:text="${app.student?.fullName}">John Doe</div>
+            <div style="font-size: 0.875rem; color: var(--text-gray)">
+                <span th:text="${app.student?.studentCode}">Code</span> • 
+                <span th:text="${app.student?.major}">Major</span>
+            </div>
+        </td>
+        <td>
+            <div class="student-name" th:text="${app.internship?.title}">Position</div>
+            <div class="internship-title" th:text="${app.internship?.location}">Location</div>
+        </td>
+        <td th:text="${app.appliedAt != null ? #temporals.format(app.appliedAt, 'MMM dd, yyyy HH:mm') : 'N/A'}">
+            Date
+        </td>
+        <td>
+            <span class="badge" 
+                  th:classappend="${app.status.name() == 'PENDING' ? 'badge-pending' : (app.status.name() == 'APPROVED' ? 'badge-approved' : 'badge-rejected')}"
+                  th:text="${app.status}">
+                STATUS
+            </span>
+        </td>
+        <td>
+            <a th:href="@{/company/applications/{id}(id=${app.id})}" class="btn btn-primary">👁️ View</a>
+            
+            <th:block th:if="${app.status.name() == 'PENDING'}">
+                <form th:action="@{/company/applications/{id}/approve(id=${app.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-success" onclick="return confirm('Approve?')">✅</button>
                 </form>
+                <form th:action="@{/company/applications/{id}/reject(id=${app.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Reject?')">❌</button>
+                </form>
+            </th:block>
+        </td>
+    </tr>
+</tbody>
 
-                <form
-                  th:if="${application.status.name() == 'PENDING'}"
-                  th:action="@{/company/applications/{id}/reject(id=${application.id})}"
-                  method="post"
-                  class="action-form"
-                  onsubmit="return confirm('Are you sure you want to reject this application?');"
-                >
-                  <button type="submit" class="btn btn-danger">
-                    ❌ Reject
-                  </button>
-                </form>
-              </td>
-            </tr>
+
+
+
           </tbody>
         </table>
       </div>

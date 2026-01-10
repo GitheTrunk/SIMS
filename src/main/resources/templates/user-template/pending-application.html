@@ -108,7 +108,6 @@
     </style>
 </head>
 <body>
-
     <!-- nav -->
     <nav>
         <div class="nav-container">
@@ -126,13 +125,12 @@
                 <a class="MA">My Applications</a>
                 <a href="/student/user-profile">Profile</a>
             </div>
-
         </div>
     </nav>
 
     <!-- body -->
     <div class="container">
-        <h1>My Applications</h1>
+        <h1>Pending Applications</h1>
             <div class="table-container">
                 <table>
                     <thead>
@@ -144,25 +142,29 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-            
                     <tbody>
                         <tr th:each="app : ${applications}">
-                            <td><strong th:text="${app.internship.company.companyName}">Company</strong></td>
-                            <td th:text="${app.internship.title}">Position</td>
+                            <td><strong th:text="${app.internship?.company?.companyName}">Company</strong></td>
+                            <td th:text="${app.internship?.title}">Position</td>
                             <td th:text="${#temporals.format(app.appliedAt, 'MMM dd, yyyy')}">Date Applied</td>
+                            <td><span class="status status-pending" th:text="${app.status}">PENDING</span></td>
                             <td>
-                                <span class="status" th:classappend="${app.status.name() == 'PENDING'} ? ' status-pending' : (${app.status.name() == 'APPROVED'} ? ' status-approved' : ' status-rejected')" th:text="${app.status}"> Status </span>
-                            </td>
-                            <td>
-                                <a th:href="@{/student/view-application/{id}(id=${app.id})}" style="color:var(--primary)">View Details</a>
+                                <a th:href="@{/student/view-application/{id}(id=${app.id})}" style="color: var(--primary); font-weight: 600;">View Details</a></td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(applications)}">
+                            <td colspan="5" style="text-align: center; padding: 40px; color: var(--gray-text);">
+                                <div style="font-size: 2rem; margin-bottom: 10px;">⏳</div>
+                                <p>You have no pending applications at the moment.</p>
+                                <a href="/student/browse-internship" style="color: var(--primary); font-weight: bold;">Browse internships now →</a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
     </div>
-    
 
+    
 <script>
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('navLinks');

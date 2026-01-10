@@ -1,25 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse Internships - SIMS</title>
+    <title>My Applications - SIMS</title>
     <style>
-
         :root { --primary: #2563eb; --secondary: #7c3aed; --gray-bg: #f9fafb; --gray-text: #6b7280; --dark-text: #1f2937; }
-        body { margin: 0; font-family: Arial, sans-serif; background-color: var(--gray-bg); color: var(--dark-text); }
-        a { text-decoration: none; }
+         body { margin: 0; font-family: Arial, sans-serif; background-color: var(--gray-bg); color: var(--dark-text); }
+         a { text-decoration: none; }
 
-        /* Navbar */
-        nav {
+
+         /* Navbar */
+         nav {
             background: linear-gradient(to right, var(--primary), var(--secondary));
             position: sticky;
             top: 0;
             z-index: 100;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .nav-container {
+         }
+          .nav-container {
             max-width: 1200px;
             margin: auto;
             padding: 16px 32px;
@@ -37,9 +35,8 @@
             gap: 8px;
         }
 
-
-        /* Hamburger */
-        .hamburger { display: none; flex-direction: column; background: none; border: none; cursor: pointer; gap: 5px; }
+         /* Hamburger */
+          .hamburger { display: none; flex-direction: column; background: none; border: none; cursor: pointer; gap: 5px; }
         .hamburger span { width: 26px; height: 3px; background: white; border-radius: 2px; transition: all 0.3s; }
         .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
         .hamburger.active span:nth-child(2) { opacity: 0; }
@@ -49,21 +46,21 @@
         .nav-links a { color: white; padding: 10px 16px; border-radius: 6px; transition: background 0.3s; }
         .nav-links a:hover { background: rgba(255,255,255,0.2); }
 
-        .container { max-width: 1200px; margin: auto; padding: 32px; }
+         .container { max-width: 1200px; margin: auto; padding: 32px; }
 
-        /* Page Specific */
-        .search-section { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 32px; display: flex; gap: 16px; }
-        input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px; }
-        .job-card { background: white; padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb; transition: transform 0.2s; }
-        .job-card:hover { transform: translateY(-4px); }
-        .company-logo { width: 48px; height: 48px; background: #eee; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary); }
-        .tag { display: inline-block; padding: 4px 12px; background: #eff6ff; color: var(--primary); border-radius: 20px; font-size: 0.8rem; margin-bottom: 12px; }
-        .btn { display: inline-block; padding: 10px 20px; background: var(--primary); color: white; border-radius: 6px; font-weight: 600; margin-top: 15px; }
+         /* Table Styles */
+         .table-container { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+         table { width: 100%; border-collapse: collapse; text-align: left; }
+         th, td { padding: 16px 24px; border-bottom: 1px solid #eee; }
+         th { background: #f8fafc; font-weight: 600; color: #64748b; }
+         .status { padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+         .status-pending { background: #fef3c7; color: #92400e; }
+         .status-approved { background: #dcfce7; color: #166534; }
+         .status-rejected { background: #fee2e2; color: #991b1b; }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-container {
+         /* Responsive */
+         @media (max-width: 768px) {
+              .nav-container {
                 flex-wrap: wrap;
                 padding: 12px 20px;
                 gap: 0;
@@ -98,15 +95,21 @@
                 padding: 14px 20px;
                 border-bottom: 1px solid rgba(255,255,255,0.1);
             }
-        }
-        .BI{
-            background: blue;
-        }
+             table { font-size: 0.9rem; }
+             th, td {
+             padding: 12px;
+             height: 40px;
+             }
+         }
+
+         .MA{
+             background: blue;
+         }
     </style>
 </head>
 <body>
 
-<!-- nav -->
+    <!-- nav -->
     <nav>
         <div class="nav-container">
             <a href="/" class="logo">📚 SIMS</a>
@@ -119,34 +122,51 @@
 
             <div class="nav-links" id="navLinks">
                 <a href="/student/dashboard">Dashboard</a>
-                <a class="BI">Browse Internships</a>
-                <a href="/student/user-application">My Applications</a>
+                <a href="/student/browse-internship">Browse Internships</a>
+                <a class="MA">My Applications</a>
                 <a href="/student/user-profile">Profile</a>
             </div>
+
         </div>
     </nav>
 
-
     <!-- body -->
     <div class="container">
-        <h1>Available Internships</h1>
-            <div class="search-section">
-                <input type="text" placeholder="Search by role, company, or keywords...">
-                <button class="btn" style="margin-top:0">Search</button>
-            </div>
+        <h1>Approved Applications</h1>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Position</th>
+                            <th>Date Applied</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+            
+                    <tbody>
+                        <tr th:each="app : ${applications}">
+                            <td><strong th:text="${app.internship.company.companyName}">Company</strong></td>
+                            <td th:text="${app.internship.title}">Position</td>
+                            <td th:text="${#temporals.format(app.appliedAt, 'MMM dd, yyyy')}">Date Applied</td>
+                            <td><span class="status status-approved" th:text="${app.status}">APPROVED</span></td>
+                            <td>
+                                a th:href="@{/student/view-application/{id}(id=${app.id})}" style="color:var(--primary); font-weight:bold;">View Details</a>
+                            </td>
+                        </tr>
 
-            <div class="grid">
-                <div th:each="internship : ${internships}" class="job-card">
-                    <div th:if="${internship.location != null}" class="tag" th:text="${internship.location}">Remote</div>
-                    <h3 th:text="${internship.title}">Internship Title</h3>
-                    <p>
-                        <strong th:text="${internship.company != null ? internship.company.companyName : 'Company'}">Company</strong> • <span th:text="${internship.location}">Location</span>
-                    </p>
-                    <p class="gray-text" th:text="${#strings.abbreviate(internship.description, 140)}">Short description</p>
-                    <a th:href="@{/student/apply/{id}(id=${internship.id})}" class="btn">Apply Now</a>
-                </div>
+                        <tr th:if="${#lists.isEmpty(applications)}">
+                            <td colspan="5" style="text-align: center; padding: 40px; color: var(--gray-text);">
+                                <p>No approved applications yet. Keep applying!</p>
+                                <a href="/student/browse-internship" style="color: var(--primary);">Browse more internships</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
     </div>
+
 
     
 <script>
